@@ -8,7 +8,7 @@
 ## 체크리스트
 
 - [x] Prisma 스키마 전체 모델 정의 (Customer, SystemInfo, History, Stakeholder, AuditLog, User)
-- [x] Supabase 데이터베이스 마이그레이션 (`prisma migrate deploy`)
+- [x] 데이터베이스 마이그레이션 (`prisma migrate deploy`)
 - [x] NextAuth.js CredentialsProvider 설정
 - [x] 역할 기반 세션 (`ADMIN` / `MEMBER`) 타입 확장
 - [x] 로그인 페이지 UI (`/login`)
@@ -73,7 +73,7 @@
 feat: Phase 2 스키마 & 인증 시스템 구현
 
 - Prisma 전체 스키마 정의 (Customer/SystemInfo/History/Stakeholder/AuditLog/User)
-- Supabase DB 마이그레이션 완료
+- DB 마이그레이션 완료
 - NextAuth CredentialsProvider + bcrypt 인증 구현
 - ADMIN/MEMBER 역할 기반 세션 타입 확장
 - 로그인 페이지 및 인증 레이아웃 컴포넌트 구현

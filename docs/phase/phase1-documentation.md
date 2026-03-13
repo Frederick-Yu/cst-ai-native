@@ -44,7 +44,6 @@
 
 1. **단일 대시보드** — 신규 입사자도 즉시 업무 파악 가능
 2. **영구 Audit Trail** — 모든 데이터 변경·민감 정보 조회에 사유 기록 강제
-3. **실시간 동기화** — Supabase Realtime으로 변경 사항 즉시 반영
 
 ## 기존 솔루션 대비 차별화
 
@@ -84,7 +83,7 @@
 |------|------|-----------|
 | Framework | Next.js 14 (App Router) | Server Actions으로 API 없이 Mutation 구현, Vercel 최적화 |
 | Language | TypeScript (strict) | Prisma 타입 안전성 + any 타입 완전 차단 |
-| Database | Supabase (PostgreSQL) | Vercel 서버리스 환경 최적화, Realtime 기본 제공 |
+| Database | Prisma Postgres (PostgreSQL) | Vercel 서버리스 환경 최적화, 클라우드 PostgreSQL |
 | ORM | Prisma | 타입 안전 쿼리, 스키마 마이그레이션 관리 |
 | Auth | NextAuth.js | Next.js 표준 인증, 역할 기반 세션 관리 |
 | UI | shadcn/ui + Tailwind CSS | Stone/Teal/Rose 팔레트 구현, 반응형 최적화 |
@@ -101,7 +100,7 @@
 ### 사전 요구사항
 - Node.js 20+
 - pnpm 9+
-- Supabase 계정 및 프로젝트
+- Prisma Postgres 프로젝트
 
 ### 설치 및 실행
 
@@ -115,7 +114,7 @@ pnpm install
 
 # 3. 환경 변수 설정
 cp .env.example .env.local
-# .env.local 파일에 Supabase 및 NextAuth 값 입력
+# .env.local 파일에 DB 및 NextAuth 값 입력
 
 # 4. DB 마이그레이션
 pnpm prisma migrate dev
@@ -252,7 +251,7 @@ await prisma.$transaction([
 
 | 기술 | 선택 이유 |
 |------|-----------|
-| Supabase | Vercel 서버리스 환경에서 로컬 DB 사용 불가 → 클라우드 PostgreSQL 필수. Realtime 기능 내장 |
+| Prisma Postgres | Vercel 서버리스 환경에서 로컬 DB 사용 불가 → 클라우드 PostgreSQL 필수 |
 | Prisma | TypeScript 타입 자동 생성으로 `any` 없는 DB 접근 보장 |
 | NextAuth.js | Next.js App Router 공식 권장 인증 라이브러리, 세션 기반 역할 관리 |
 | shadcn/ui | 컴포넌트 소스를 직접 소유하여 Stone/Teal/Rose 팔레트 커스터마이징 용이 |

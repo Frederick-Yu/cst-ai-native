@@ -68,7 +68,7 @@
 |------|------|-----------|
 | Framework | **Next.js 14 (App Router)** | Server Actions으로 API 없이 Mutation 구현, Vercel 최적화 |
 | Language | **TypeScript** (strict) | Prisma 타입 안전성 확보, `any` 타입 완전 차단 |
-| Database | **Supabase** (PostgreSQL) | Vercel 서버리스 환경 최적화, 관리형 PostgreSQL + RLS 내장 |
+| Database | **Prisma Postgres** (PostgreSQL) | Vercel 서버리스 환경 최적화, 관리형 클라우드 PostgreSQL |
 | ORM | **Prisma** | 타입 안전 쿼리, 스키마 마이그레이션 관리 |
 | Auth | **NextAuth.js** | Next.js 표준 인증, 역할 기반(ADMIN/MEMBER) 세션 관리 |
 | UI | **shadcn/ui** + Tailwind CSS | Stone/Teal/Rose 팔레트 구현, 반응형 최적화 |
@@ -115,7 +115,6 @@ docs/
 
 - Node.js 20+
 - pnpm 9+
-- Supabase 계정 및 프로젝트
 
 ### 설치 및 실행
 
@@ -135,12 +134,8 @@ cp .env.example .env.local
 `.env.local` 필수 항목:
 
 ```bash
-# Supabase
-DATABASE_URL="postgresql://postgres:[PASSWORD]@db.[PROJECT_ID].supabase.co:5432/postgres"
-DIRECT_URL="postgresql://postgres:[PASSWORD]@db.[PROJECT_ID].supabase.co:5432/postgres"
-NEXT_PUBLIC_SUPABASE_URL="https://[PROJECT_ID].supabase.co"
-NEXT_PUBLIC_SUPABASE_ANON_KEY="[ANON_KEY]"
-SUPABASE_SERVICE_ROLE_KEY="[SERVICE_ROLE_KEY]"
+# Database (Prisma Postgres)
+DATABASE_URL="postgres://[USER]:[PASSWORD]@db.prisma.io:5432/postgres?sslmode=require"
 
 # NextAuth
 NEXTAUTH_SECRET="[random-32-char-string]"

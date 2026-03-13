@@ -129,7 +129,6 @@ export function DashboardStats({ customerCount, recentAuditCount }: DashboardSta
 ## 3. 최근 변경 내역 위젯 (서버사이드 렌더링)
 
 > **구현 방식:** `force-dynamic` 서버사이드 렌더링으로 페이지 접속 시 최신 데이터 제공.
-> Supabase Realtime 클라이언트 구독은 현재 미구현 상태이며, 새로고침 없이 실시간 갱신이 필요할 경우 향후 추가할 수 있음.
 
 `src/components/dashboard/recent-changes-widget.tsx`:
 ```typescript

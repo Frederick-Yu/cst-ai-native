@@ -6,7 +6,7 @@
 
 * **해결하려는 문제 (Problem):** 기존 고객사 시스템의 구축/유지보수 이력이 파편화되어 있고, 암호 등 민감 정보에 대한 보안 감사(Audit) 체계가 부재하여 인수인계 및 장애 대응에 막대한 시간이 소요됨.
 * **핵심 목표 (Goal):** 신규 입사자도 즉시 업무 파악이 가능한 단일 대시보드 제공 및 민감 정보 접근/변경 시 사유(Reason) 입력을 강제하는 영구적인 Audit Trail 구축.
-* **차별화 (Differentiation):** 단순한 위키나 엑셀을 넘어, Vercel \+ Supabase 기반으로 실시간 동기화되며, 모든 데이터 변경(특히 비밀번호 조회)에 대해 '조회 사유'를 남기는 강력한 내부 통제(Compliance) 기능을 내재화함.
+* **차별화 (Differentiation):** 단순한 위키나 엑셀을 넘어, Vercel \+ Prisma Postgres 기반으로 운영되며, 모든 데이터 변경(특히 비밀번호 조회)에 대해 '조회 사유'를 남기는 강력한 내부 통제(Compliance) 기능을 내재화함.
 * **AI 지침:** 코드를 작성할 때 단순히 기능을 구현하는 것을 넘어, "이 코드가 정보의 파편화를 막고 보안 추적성을 높이는가?"를 항상 고려하라.
 
   ## **2\. 아키텍처 및 기술 스택 (Tech Implementation & Architecture)**
@@ -14,7 +14,7 @@
 본 프로젝트는 **Next.js (App Router) 기반의 풀스택(Fullstack)** 환경이다.
 
 * **Core:** Next.js 14+ (App Router), React 18+, TypeScript
-* **Database & Auth:** Supabase (PostgreSQL), NextAuth.js (Auth.js)
+* **Database & Auth:** Prisma Postgres (PostgreSQL), NextAuth.js (Auth.js)
 * **ORM:** Prisma (엄격한 타입 시그니처 유지)
 * **Styling & UI:** Tailwind CSS, shadcn/ui, Lucide Icons
 * **아키텍처 관심사 분리 (AI 강제 규칙):**

@@ -48,7 +48,7 @@ src/
 
 - Next.js 14 프로젝트 생성 (TypeScript strict, App Router)
 - ESLint `@typescript-eslint/no-explicit-any: error` 설정
-- Prisma 초기화 + Supabase 연결
+- Prisma 초기화 + DB 연결
 - GitHub 레포 연결 + Vercel 배포 연동
 - `.github/workflows/ci.yml` (Lint → TypeCheck → Test → Build)
 - git tag: `v0.1-skeleton`

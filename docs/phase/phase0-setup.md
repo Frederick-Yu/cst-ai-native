@@ -10,7 +10,7 @@
 - [x] Next.js 프로젝트 생성
 - [x] TypeScript strict 모드 설정
 - [x] ESLint + Prettier 설정
-- [x] Prisma 초기화 + Supabase 연결 확인
+- [x] Prisma 초기화 + DB 연결 확인
 - [x] GitHub 레포 생성 및 초기 Push
 - [x] Vercel 프로젝트 연동
 - [x] `.github/workflows/ci.yml` 작성
@@ -51,7 +51,6 @@ src/
     ui/             # shadcn/ui 설치 후 자동 생성
   lib/
     prisma.ts
-    supabase.ts
   types/
     index.ts
 ```
@@ -145,14 +144,8 @@ pnpm dlx shadcn@latest add button card dialog input label skeleton badge
 
 `.env.local` (로컬, Git 제외):
 ```bash
-# Database (Supabase)
-DATABASE_URL="postgresql://postgres:[PASSWORD]@db.[PROJECT_ID].supabase.co:5432/postgres"
-DIRECT_URL="postgresql://postgres:[PASSWORD]@db.[PROJECT_ID].supabase.co:5432/postgres"
-
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL="https://[PROJECT_ID].supabase.co"
-NEXT_PUBLIC_SUPABASE_ANON_KEY="[ANON_KEY]"
-SUPABASE_SERVICE_ROLE_KEY="[SERVICE_ROLE_KEY]"
+# Database (Prisma Postgres)
+DATABASE_URL="postgres://[USER]:[PASSWORD]@db.prisma.io:5432/postgres?sslmode=require"
 
 # NextAuth
 NEXTAUTH_SECRET="[random-32-char-string]"
@@ -162,10 +155,6 @@ NEXTAUTH_URL="http://localhost:3000"
 `.env.example` (Git 포함, 값은 빈칸):
 ```bash
 DATABASE_URL=""
-DIRECT_URL=""
-NEXT_PUBLIC_SUPABASE_URL=""
-NEXT_PUBLIC_SUPABASE_ANON_KEY=""
-SUPABASE_SERVICE_ROLE_KEY=""
 NEXTAUTH_SECRET=""
 NEXTAUTH_URL=""
 ```
@@ -224,8 +213,6 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 ```
 
 `package.json` scripts 추가:
@@ -278,7 +265,7 @@ feat: 프로젝트 초기 설정 및 CI/CD 파이프라인 구성
 
 - Next.js 14 App Router + TypeScript strict 모드 설정
 - ESLint @typescript-eslint/no-explicit-any error 규칙 적용
-- Prisma + Supabase 연결 설정 및 PrismaClient 싱글턴 구현
+- Prisma + Prisma Postgres 연결 설정 및 PrismaClient 싱글턴 구현
 - shadcn/ui Stone 테마 초기화 및 기본 컴포넌트 설치
 - GitHub Actions CI (Lint→TypeCheck→Test→Build) 파이프라인 구성
 - Vercel Production 배포 연동 완료

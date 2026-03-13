@@ -46,6 +46,9 @@ export default async function CustomersPage({ searchParams }: CustomersPageProps
         select: { histories: true, systemInfos: true },
       },
     },
+  }).catch((error) => {
+    console.error("[CustomersPage]", error);
+    throw new Error("고객사 목록을 불러오는 중 오류가 발생했습니다");
   });
 
   return (

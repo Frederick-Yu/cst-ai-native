@@ -29,30 +29,31 @@ export async function revealPassword(
   }
 
   try {
-    const systemInfo = await prisma.systemInfo.findUnique({
-      where: { id: parsed.data.systemInfoId },
-      select: { passwordHash: true, customerId: true, name: true },
+    const result = await prisma.$transaction(async (tx) => {
+      const systemInfo = await tx.systemInfo.findUnique({
+        where: { id: parsed.data.systemInfoId },
+        select: { passwordHash: true, customerId: true, name: true },
+      });
+
+      if (!systemInfo) return { found: false as const };
+      if (!systemInfo.passwordHash) return { found: true as const, hasPassword: false as const };
+
+      await tx.auditLog.create({
+        data: {
+          userId: session.user.id,
+          customerId: systemInfo.customerId,
+          actionType: "ACCESS",
+          targetData: `SystemInfo:${parsed.data.systemInfoId}(${systemInfo.name})`,
+          accessReason: parsed.data.accessReason,
+        },
+      });
+
+      return { found: true as const, hasPassword: true as const, passwordHash: systemInfo.passwordHash };
     });
 
-    if (!systemInfo) {
-      return { success: false, error: "시스템 정보를 찾을 수 없습니다" };
-    }
-
-    if (!systemInfo.passwordHash) {
-      return { success: false, error: "저장된 비밀번호가 없습니다" };
-    }
-
-    await prisma.auditLog.create({
-      data: {
-        userId: session.user.id,
-        customerId: systemInfo.customerId,
-        actionType: "ACCESS",
-        targetData: `SystemInfo:${parsed.data.systemInfoId}(${systemInfo.name})`,
-        accessReason: parsed.data.accessReason,
-      },
-    });
-
-    return { success: true, passwordHash: systemInfo.passwordHash };
+    if (!result.found) return { success: false, error: "시스템 정보를 찾을 수 없습니다" };
+    if (!result.hasPassword) return { success: false, error: "저장된 비밀번호가 없습니다" };
+    return { success: true, passwordHash: result.passwordHash };
   } catch (error) {
     console.error("[revealPassword]", error);
     return { success: false, error: "조회 중 오류가 발생했습니다" };

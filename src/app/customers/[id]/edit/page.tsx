@@ -23,6 +23,9 @@ export default async function CustomerEditPage({ params }: EditPageProps) {
       contractStatus: true,
       description: true,
     },
+  }).catch((error) => {
+    console.error("[CustomerEditPage]", error);
+    throw new Error("고객사 정보를 불러오는 중 오류가 발생했습니다");
   });
 
   if (!customer) notFound();

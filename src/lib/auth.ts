@@ -17,9 +17,15 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
+        let user;
+        try {
+          user = await prisma.user.findUnique({
+            where: { email: credentials.email },
+          });
+        } catch (error) {
+          console.error("[authorize]", error);
+          throw new Error("로그인 처리 중 오류가 발생했습니다");
+        }
 
         if (!user || !user.passwordHash) return null;
 

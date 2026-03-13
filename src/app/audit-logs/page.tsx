@@ -14,6 +14,9 @@ export default async function AuditLogsPage() {
       user: { select: { name: true } },
       customer: { select: { id: true, name: true } },
     },
+  }).catch((error) => {
+    console.error("[AuditLogsPage]", error);
+    throw new Error("감사 로그를 불러오는 중 오류가 발생했습니다");
   });
 
   return (

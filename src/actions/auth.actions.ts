@@ -23,22 +23,32 @@ export async function signUp(formData: FormData) {
     return { success: false, error: parsed.error.flatten().fieldErrors };
   }
 
-  const existing = await prisma.user.findUnique({
-    where: { email: parsed.data.email },
-  });
-  if (existing) {
-    return { success: false, error: { email: ["이미 사용 중인 이메일입니다"] } };
-  }
-
   try {
+    const existing = await prisma.user.findUnique({
+      where: { email: parsed.data.email },
+    });
+    if (existing) {
+      return { success: false, error: { email: ["이미 사용 중인 이메일입니다"] } };
+    }
+
     const passwordHash = await bcrypt.hash(parsed.data.password, 12);
-    await prisma.user.create({
-      data: {
-        name: parsed.data.name,
-        email: parsed.data.email,
-        passwordHash,
-        role: "VIEWER",
-      },
+    await prisma.$transaction(async (tx) => {
+      const created = await tx.user.create({
+        data: {
+          name: parsed.data.name,
+          email: parsed.data.email,
+          passwordHash,
+          role: "VIEWER",
+        },
+      });
+      await tx.auditLog.create({
+        data: {
+          userId: created.id,
+          actionType: "CREATE",
+          targetData: `User:${created.id}(${created.name})`,
+          accessReason: "신규 회원가입",
+        },
+      });
     });
   } catch {
     return { success: false, error: "회원가입 중 오류가 발생했습니다" };

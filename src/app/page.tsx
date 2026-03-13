@@ -25,7 +25,10 @@ export default async function DashboardPage() {
         user: { select: { name: true } },
       },
     }),
-  ]);
+  ]).catch((error) => {
+    console.error("[DashboardPage]", error);
+    throw new Error("대시보드 데이터를 불러오는 중 오류가 발생했습니다");
+  });
 
   return (
     <AuthenticatedLayout>

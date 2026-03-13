@@ -54,7 +54,10 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
       orderBy: { createdAt: "desc" },
       include: { user: { select: { name: true } } },
     }),
-  ]);
+  ]).catch((error) => {
+    console.error("[CustomerDetailPage]", error);
+    throw new Error("고객사 정보를 불러오는 중 오류가 발생했습니다");
+  });
 
   if (!customer) {
     notFound();

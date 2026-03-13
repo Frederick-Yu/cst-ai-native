@@ -59,7 +59,7 @@ export function LoginForm() {
           <CardTitle className="text-stone-100">로그인</CardTitle>
         </div>
         <CardDescription className="text-stone-400">
-          Customer Support Tracker에 오신 것을 환영합니다.
+          Customer Status Tracker에 오신 것을 환영합니다.
         </CardDescription>
       </CardHeader>
 

@@ -1,6 +1,6 @@
 # 개발 로드맵
 
-**프로젝트:** 고객사 통합 이력 관리 시스템 (Customer Support Tracker)
+**프로젝트:** 고객사 통합 이력 관리 시스템 (Customer Status Tracker)
 **문서 버전:** 2.0
 **작성일:** 2026-03-13
 

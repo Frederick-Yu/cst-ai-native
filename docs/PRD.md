@@ -1,5 +1,5 @@
 ![][image1]  
-고객사 통합 이력 관리 시스템 (Customer Support Tracker)
+고객사 통합 이력 관리 시스템 (Customer Status Tracker)
 
 **버전:** 1.1
 

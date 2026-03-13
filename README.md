@@ -1,4 +1,4 @@
-# Customer Support Tracker
+# Customer Status Tracker
 
 [![CI](https://github.com/Frederick-Yu/cst-ai-native/actions/workflows/ci.yml/badge.svg)](https://github.com/Frederick-Yu/cst-ai-native/actions/workflows/ci.yml)
 

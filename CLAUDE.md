@@ -1,4 +1,4 @@
-# **Customer Support Tracker \- AI System Context & Instructions (CLAUDE.md)**
+# **Customer Status Tracker \- AI System Context & Instructions (CLAUDE.md)**
 
 이 문서는 '고객사 통합 이력 관리 시스템' 프로젝트의 AI 코딩 어시스턴트(Claude)를 위한 컨텍스트 및 시스템 지침서입니다. AI는 코드 생성, 리팩토링, 테스트 작성 시 반드시 아래의 규칙과 평가 기준을 엄격하게 준수해야 합니다.
 

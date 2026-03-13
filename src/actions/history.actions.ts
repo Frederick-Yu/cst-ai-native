@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { EventType } from "@prisma/client";
+import { EventType, Prisma } from "@prisma/client";
 
 const CreateHistorySchema = z.object({
   customerId: z.string().min(1),
@@ -48,7 +48,11 @@ export async function createHistory(formData: FormData) {
 
     revalidatePath(`/customers/${parsed.data.customerId}`);
     return { success: true };
-  } catch {
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2003") {
+      return { success: false, error: "존재하지 않는 고객사입니다" };
+    }
+    console.error("[createHistory]", error);
     return { success: false, error: "저장 중 오류가 발생했습니다" };
   }
 }

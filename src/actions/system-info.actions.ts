@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { AssetType, ServiceEnv } from "@prisma/client";
+import { AssetType, ServiceEnv, Prisma } from "@prisma/client";
 
 const UpdateSystemInfoSchema = z.object({
   systemInfoId: z.string().min(1),
@@ -35,7 +35,7 @@ export async function updateSystemInfo(formData: FormData) {
   }
 
   // 비밀번호가 비어 있으면 기존 값 유지
-  const updateData: Record<string, unknown> = {
+  const updateData: Prisma.SystemInfoUpdateInput = {
     name: parsed.data.name,
     assetType: parsed.data.assetType,
     serviceEnv: parsed.data.serviceEnv,
@@ -43,10 +43,8 @@ export async function updateSystemInfo(formData: FormData) {
     host: parsed.data.host || null,
     port: parsed.data.port ?? null,
     username: parsed.data.username || null,
+    ...(parsed.data.passwordHash && { passwordHash: parsed.data.passwordHash }),
   };
-  if (parsed.data.passwordHash) {
-    updateData.passwordHash = parsed.data.passwordHash;
-  }
 
   try {
     await prisma.$transaction([
@@ -67,7 +65,11 @@ export async function updateSystemInfo(formData: FormData) {
 
     revalidatePath(`/customers/${parsed.data.customerId}`);
     return { success: true };
-  } catch {
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
+      return { success: false, error: "수정하려는 시스템 정보를 찾을 수 없습니다" };
+    }
+    console.error("[updateSystemInfo]", error);
     return { success: false, error: "저장 중 오류가 발생했습니다" };
   }
 }
@@ -125,7 +127,8 @@ export async function createSystemInfo(formData: FormData) {
 
     revalidatePath(`/customers/${parsed.data.customerId}`);
     return { success: true };
-  } catch {
+  } catch (error) {
+    console.error("[createSystemInfo]", error);
     return { success: false, error: "저장 중 오류가 발생했습니다" };
   }
 }

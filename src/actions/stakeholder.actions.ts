@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { StakeholderRole } from "@prisma/client";
+import { StakeholderRole, Prisma } from "@prisma/client";
 
 const UpdateStakeholderSchema = z.object({
   stakeholderId: z.string().min(1),
@@ -50,7 +50,11 @@ export async function updateStakeholder(formData: FormData) {
 
     revalidatePath(`/customers/${parsed.data.customerId}`);
     return { success: true };
-  } catch {
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
+      return { success: false, error: "수정하려는 담당자를 찾을 수 없습니다" };
+    }
+    console.error("[updateStakeholder]", error);
     return { success: false, error: "저장 중 오류가 발생했습니다" };
   }
 }
@@ -97,7 +101,8 @@ export async function createStakeholder(formData: FormData) {
 
     revalidatePath(`/customers/${parsed.data.customerId}`);
     return { success: true };
-  } catch {
+  } catch (error) {
+    console.error("[createStakeholder]", error);
     return { success: false, error: "저장 중 오류가 발생했습니다" };
   }
 }

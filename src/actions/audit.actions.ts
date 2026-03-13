@@ -53,7 +53,8 @@ export async function revealPassword(
     });
 
     return { success: true, passwordHash: systemInfo.passwordHash };
-  } catch {
+  } catch (error) {
+    console.error("[revealPassword]", error);
     return { success: false, error: "조회 중 오류가 발생했습니다" };
   }
 }

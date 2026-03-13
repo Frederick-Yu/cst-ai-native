@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { IndustryType, ContractStatus } from "@prisma/client";
+import { IndustryType, ContractStatus, Prisma } from "@prisma/client";
 
 const UpdateCustomerSchema = z.object({
   customerId: z.string().min(1),
@@ -47,7 +47,11 @@ export async function updateCustomer(formData: FormData) {
         },
       }),
     ]);
-  } catch {
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
+      return { success: false, error: "수정하려는 고객사를 찾을 수 없습니다" };
+    }
+    console.error("[updateCustomer]", error);
     return { success: false, error: "저장 중 오류가 발생했습니다" };
   }
 
@@ -98,7 +102,11 @@ export async function createCustomer(formData: FormData) {
     });
 
     customerId = customer.id;
-  } catch {
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+      return { success: false, error: "이미 등록된 고객사명입니다" };
+    }
+    console.error("[createCustomer]", error);
     return { success: false, error: "저장 중 오류가 발생했습니다" };
   }
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useActionState } from "react";
+import { useRouter } from "next/navigation";
 import { Pencil } from "lucide-react";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle,
@@ -33,6 +34,7 @@ type FormState = { success?: boolean; error?: string | Record<string, string[]> 
 
 export function EditStakeholderDialog({ stakeholder }: { stakeholder: StakeholderData }) {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   const [state, formAction, isPending] = useActionState<FormState, FormData>(
     async (_prev, formData) => {
@@ -40,6 +42,7 @@ export function EditStakeholderDialog({ stakeholder }: { stakeholder: Stakeholde
       if (result.success) {
         setOpen(false);
         toast.success("담당자 정보가 수정되었습니다");
+        router.refresh();
         return { success: true };
       }
       return result;

@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { LoginForm } from "@/components/auth/login-form";
 
 export const metadata = {
-  title: "로그인 | Customer Success Tracker",
+  title: "로그인 | Customer Support Tracker",
 };
 
 export default function LoginPage() {

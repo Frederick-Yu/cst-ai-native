@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Customer Success Tracker",
+  title: "Customer Support Tracker",
   description: "고객사 통합 이력 관리 시스템",
 };
 

@@ -1,7 +1,7 @@
 import { SignUpForm } from "@/components/auth/signup-form";
 
 export const metadata = {
-  title: "회원가입 | Customer Success Tracker",
+  title: "회원가입 | Customer Support Tracker",
 };
 
 export default function SignUpPage() {

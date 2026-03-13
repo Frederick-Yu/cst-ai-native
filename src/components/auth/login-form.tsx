@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,10 +15,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ShieldAlert } from "lucide-react";
+import { ShieldAlert, CheckCircle2 } from "lucide-react";
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const registered = searchParams.get("registered") === "1";
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -60,11 +64,16 @@ export function LoginForm() {
       </CardHeader>
 
       <CardContent>
+        {registered && (
+          <div className="mb-4 flex items-center gap-2 rounded-md bg-teal-900/40 px-3 py-2 text-sm text-teal-300">
+            <CheckCircle2 className="size-4 shrink-0" aria-hidden="true" />
+            회원가입이 완료되었습니다. 로그인해주세요.
+          </div>
+        )}
+
         <form id="login-form" aria-label="로그인 폼" onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="email" className="text-stone-300">
-              이메일
-            </Label>
+            <Label htmlFor="email" className="text-stone-300">이메일</Label>
             <Input
               id="email"
               type="email"
@@ -79,9 +88,7 @@ export function LoginForm() {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="password" className="text-stone-300">
-              비밀번호
-            </Label>
+            <Label htmlFor="password" className="text-stone-300">비밀번호</Label>
             <Input
               id="password"
               type="password"
@@ -103,7 +110,7 @@ export function LoginForm() {
         </form>
       </CardContent>
 
-      <CardFooter>
+      <CardFooter className="flex flex-col gap-3">
         <Button
           type="submit"
           form="login-form"
@@ -113,6 +120,12 @@ export function LoginForm() {
         >
           {isLoading ? "로그인 중..." : "로그인"}
         </Button>
+        <p className="text-sm text-stone-400">
+          계정이 없으신가요?{" "}
+          <Link href="/signup" className="text-teal-400 hover:underline">
+            회원가입
+          </Link>
+        </p>
       </CardFooter>
     </Card>
   );

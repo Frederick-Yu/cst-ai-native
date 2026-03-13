@@ -193,6 +193,28 @@ User     ──< AuditLog      (감사 로그, access_reason 필수)
 
 ---
 
+## 테스트 현황
+
+`pnpm test` 실행 시 **11개 테스트 스위트 / 81개 케이스** 전부 통과.
+
+| 테스트 파일 | 케이스 | 검증 대상 |
+|-------------|:------:|-----------|
+| `audit.actions.test.ts` | 6 | `revealPassword` + AuditLog 트랜잭션 필수 기록 |
+| `customer.actions.test.ts` | 7 | 고객사 생성·수정 + `change_reason` Zod 강제 |
+| `auth.actions.test.ts` | 6 | 회원가입 + bcrypt 해싱 |
+| `stakeholder.actions.test.ts` | 8 | 담당자 CRUD + 권한 검증 |
+| `system-info.actions.test.ts` | 8 | 시스템 정보 CRUD + 비밀번호 필드 처리 |
+| `history.actions.test.ts` | 5 | 이력 생성 + AuditLog 자동 기록 |
+| `zod-schemas.test.ts` | 8 | `change_reason` / `access_reason` 5자 이상 검증 |
+| `password-reveal-dialog.test.tsx` | 5 | ARIA 접근성 + 조회 플로우 |
+| `customer-form.test.tsx` | 9 | 폼 필드 렌더링 + 에러 메시지 |
+| `login-form.test.tsx` | 7 | 인증 플로우 + 실패 처리 |
+| `auth.test.ts` | 7 | `authorize` 로직 (비밀번호 불일치·미존재 사용자) |
+
+테스트 파일 위치: `src/actions/__tests__/`, `src/components/**/__tests__/`, `src/lib/__tests__/`
+
+---
+
 ## 개발 규칙
 
 - **커밋 메시지:** Conventional Commits 형식 준수

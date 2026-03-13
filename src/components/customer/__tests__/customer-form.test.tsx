@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { CustomerForm } from "@/components/customer/customer-form";
 
 // useRouter mock

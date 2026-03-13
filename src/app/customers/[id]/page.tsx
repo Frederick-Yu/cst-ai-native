@@ -85,19 +85,6 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
           </Link>
         </div>
 
-        {/* 변경 이력 */}
-        <Card className="mb-6 border-stone-200 bg-white">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-stone-700">
-              변경 이력
-              <span className="ml-2 text-xs font-normal text-stone-400">({auditLogs.length}건)</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ChangeHistoryTabs auditLogs={auditLogs} />
-          </CardContent>
-        </Card>
-
         {/* 2열 레이아웃 */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {/* 좌측: 담당자 + 시스템 정보 */}
@@ -149,6 +136,19 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
             </Card>
           </section>
         </div>
+
+        {/* 변경 이력 */}
+        <Card className="mt-6 border-stone-200 bg-white">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-stone-700">
+              변경 이력
+              <span className="ml-2 text-xs font-normal text-stone-400">({auditLogs.length}건)</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ChangeHistoryTabs auditLogs={auditLogs} />
+          </CardContent>
+        </Card>
       </div>
     </AuthenticatedLayout>
   );

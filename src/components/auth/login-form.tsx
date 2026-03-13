@@ -110,7 +110,7 @@ export function LoginForm() {
         </form>
       </CardContent>
 
-      <CardFooter className="flex flex-col gap-3">
+      <CardFooter className="flex flex-col gap-3 border-t-0 bg-transparent">
         <Button
           type="submit"
           form="login-form"

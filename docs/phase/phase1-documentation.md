@@ -7,13 +7,15 @@
 
 ## 체크리스트
 
-- [ ] `README.md` 5개 섹션 작성 (문제 정의·목표·기능 명세·기술 스택·실행 가이드)
-- [ ] `CLAUDE.md` 구현 예시 스니펫 추가 (Server Action, Zod, Audit Log 패턴)
-- [ ] `docs/adr/001-server-actions-only.md` 작성
-- [ ] `docs/adr/002-audit-log-transaction.md` 작성
-- [ ] `docs/adr/003-tech-stack-rationale.md` 작성
-- [ ] 커밋: `docs: README 프로젝트 정의 및 기술 스택 섹션 완성`
-- [ ] 커밋: `docs: CLAUDE.md 구현 패턴 예시 추가 및 ADR 문서 작성`
+- [x] `README.md` 5개 섹션 작성 (문제 정의·목표·기능 명세·기술 스택·실행 가이드)
+- [x] `CLAUDE.md` 구현 예시 스니펫 추가 (Server Action, Zod, Audit Log 패턴)
+- [x] `docs/adr/001-server-actions-only.md` 작성
+- [x] `docs/adr/002-audit-log-transaction.md` 작성
+- [x] `docs/adr/003-tech-stack-rationale.md` 작성
+- [x] 커밋: `docs: README 프로젝트 정의 및 기술 스택 섹션 완성`
+- [x] 커밋: `docs: CLAUDE.md 구현 패턴 예시 추가 및 ADR 문서 작성`
+
+> **✅ 완료** — 2026-03-13
 
 ---
 

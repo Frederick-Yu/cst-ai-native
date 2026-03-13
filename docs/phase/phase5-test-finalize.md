@@ -7,15 +7,17 @@
 
 ## 체크리스트
 
-- [ ] Jest + React Testing Library 설치 및 설정
-- [ ] 단위 테스트 1: Audit Log 기록 함수
-- [ ] 단위 테스트 2: 권한 검증 로직
-- [ ] 단위 테스트 3: Zod 스키마 (change_reason / access_reason 검증)
-- [ ] 컴포넌트 테스트: PasswordRevealDialog ARIA 검증
-- [ ] CI 파이프라인에 `pnpm test` 통합 확인
-- [ ] 커밋 이력 정리 (Conventional Commits 준수 여부 검토)
-- [ ] git tag: `v1.0-release`
-- [ ] 커밋: `test: Audit Log 및 권한 검증 단위 테스트 추가`
+- [x] Jest + React Testing Library 설치 및 설정
+- [x] 단위 테스트 1: Audit Log 기록 함수
+- [x] 단위 테스트 2: 권한 검증 로직
+- [x] 단위 테스트 3: Zod 스키마 (change_reason / access_reason 검증)
+- [x] 컴포넌트 테스트: PasswordRevealDialog ARIA 검증
+- [x] CI 파이프라인에 `pnpm test` 통합 확인
+- [x] 커밋 이력 정리 (Conventional Commits 준수 여부 검토)
+- [x] git tag: `v1.0-release`
+- [x] 커밋: `test: Audit Log 및 권한 검증 단위 테스트 추가`
+
+> **✅ 완료** — 2026-03-13
 
 ---
 

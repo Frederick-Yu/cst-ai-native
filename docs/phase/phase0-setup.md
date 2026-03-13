@@ -7,16 +7,18 @@
 
 ## 체크리스트
 
-- [ ] Next.js 프로젝트 생성
-- [ ] TypeScript strict 모드 설정
-- [ ] ESLint + Prettier 설정
-- [ ] Prisma 초기화 + Supabase 연결 확인
-- [ ] GitHub 레포 생성 및 초기 Push
-- [ ] Vercel 프로젝트 연동
-- [ ] `.github/workflows/ci.yml` 작성
-- [ ] `.env.local` 환경 변수 정의
-- [ ] 커밋: `feat: 프로젝트 초기 설정 및 CI/CD 파이프라인 구성`
-- [ ] git tag: `v0.1-skeleton`
+- [x] Next.js 프로젝트 생성
+- [x] TypeScript strict 모드 설정
+- [x] ESLint + Prettier 설정
+- [x] Prisma 초기화 + Supabase 연결 확인
+- [x] GitHub 레포 생성 및 초기 Push
+- [x] Vercel 프로젝트 연동
+- [x] `.github/workflows/ci.yml` 작성
+- [x] `.env.local` 환경 변수 정의
+- [x] 커밋: `feat: 프로젝트 초기 설정 및 CI/CD 파이프라인 구성`
+- [x] git tag: `v0.1-skeleton`
+
+> **✅ 완료** — 2026-03-13
 
 ---
 

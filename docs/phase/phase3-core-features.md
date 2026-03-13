@@ -7,17 +7,19 @@
 
 ## 체크리스트
 
-- [ ] 고객사 목록 Server Component (검색 포함)
-- [ ] 고객사 상세 페이지 (타임라인·접속 정보)
-- [ ] 고객사 생성 Server Action (Zod 검증 + change_reason)
-- [ ] 고객사 수정 Server Action (Zod 검증 + Audit Log 트랜잭션)
-- [ ] 비밀번호 마스킹 컴포넌트
-- [ ] 비밀번호 조회 팝업 (access_reason 강제 입력)
-- [ ] Audit Log 기록 Service 함수
-- [ ] Audit Log 열람 페이지 (관리자 전용)
-- [ ] Skeleton UI 적용 (목록·상세 페이지)
-- [ ] 커밋: `feat: 고객사 CRUD 및 비밀번호 조회 Audit Log 기록 기능 추가`
-- [ ] git tag: `v0.3-core`
+- [x] 고객사 목록 Server Component (검색 포함)
+- [x] 고객사 상세 페이지 (타임라인·접속 정보)
+- [x] 고객사 생성 Server Action (Zod 검증 + change_reason)
+- [x] 고객사 수정 Server Action (Zod 검증 + Audit Log 트랜잭션)
+- [x] 비밀번호 마스킹 컴포넌트
+- [x] 비밀번호 조회 팝업 (access_reason 강제 입력)
+- [x] Audit Log 기록 Service 함수
+- [x] Audit Log 열람 페이지 (관리자 전용)
+- [x] Skeleton UI 적용 (목록·상세 페이지)
+- [x] 커밋: `feat: 고객사 CRUD 및 비밀번호 조회 Audit Log 기록 기능 추가`
+- [x] git tag: `v0.3-core`
+
+> **✅ 완료** — 2026-03-13
 
 ---
 

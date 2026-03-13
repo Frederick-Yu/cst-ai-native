@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -H \"Authorization: token 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\" https://api.github.com/user | python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d['login']\\)\")"
+    ]
+  }
+}

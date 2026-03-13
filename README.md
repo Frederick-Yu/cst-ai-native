@@ -23,7 +23,7 @@
 
 - **단일 대시보드** — 신규 입사자도 즉시 업무 파악 가능한 통합 뷰 제공
 - **영구 Audit Trail** — 모든 정보 변경·민감 정보 조회에 사유(Reason) 기록 강제
-- **실시간 동기화** — Supabase Realtime으로 변경 사항 즉시 반영
+- **최신 데이터 보장** — 동적 서버사이드 렌더링(force-dynamic)으로 항상 최신 데이터 제공
 
 ---
 
@@ -58,7 +58,7 @@
 
 ### 4. 대시보드 & 검색
 - 고객사명, 담당자, 기술 스택 키워드 통합 검색
-- 최근 변경 내역 위젯 (Supabase Realtime 실시간 갱신)
+- 최근 변경 내역 위젯 (서버사이드 동적 렌더링, 페이지 접속 시 최신 10건 표시)
 
 ---
 
@@ -68,7 +68,7 @@
 |------|------|-----------|
 | Framework | **Next.js 14 (App Router)** | Server Actions으로 API 없이 Mutation 구현, Vercel 최적화 |
 | Language | **TypeScript** (strict) | Prisma 타입 안전성 확보, `any` 타입 완전 차단 |
-| Database | **Supabase** (PostgreSQL) | Vercel 서버리스 환경 최적화, Realtime 기능 내장 |
+| Database | **Supabase** (PostgreSQL) | Vercel 서버리스 환경 최적화, 관리형 PostgreSQL + RLS 내장 |
 | ORM | **Prisma** | 타입 안전 쿼리, 스키마 마이그레이션 관리 |
 | Auth | **NextAuth.js** | Next.js 표준 인증, 역할 기반(ADMIN/MEMBER) 세션 관리 |
 | UI | **shadcn/ui** + Tailwind CSS | Stone/Teal/Rose 팔레트 구현, 반응형 최적화 |

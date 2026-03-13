@@ -26,7 +26,6 @@ src/
     layout/              # 네비게이션 등 레이아웃
   lib/
     prisma.ts            # PrismaClient 싱글턴
-    supabase.ts          # Supabase 클라이언트
     auth.ts              # NextAuth 설정
     audit.ts             # Audit Log 유틸리티
   types/                 # 전역 TypeScript 인터페이스
@@ -90,7 +89,7 @@ DB 모델과 인증 기반을 확립한다.
 
 모바일부터 데스크탑까지 완성된 UX를 구현한다.
 
-- 대시보드 통계 카드 + 최근 변경 내역 위젯 (Supabase Realtime)
+- 대시보드 통계 카드 + 최근 변경 내역 위젯 (서버사이드 동적 렌더링)
 - 접속 정보 클립보드 복사 버튼
 - 전 페이지 Tailwind Mobile-first 반응형 (`md:`, `lg:` 브레이크포인트)
 - 모바일 햄버거 네비게이션

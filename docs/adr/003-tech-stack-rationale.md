@@ -8,7 +8,7 @@
 | 기술 | 버전 | 선택 이유 |
 |------|------|-----------|
 | **Next.js** | 16.x (App Router) | Server Actions + RSC로 API Route 없이 풀스택 구현, Vercel 네이티브 최적화 |
-| **Supabase** | — | Vercel 서버리스 환경에서 로컬 DB 사용 불가 → 클라우드 PostgreSQL 필수. Realtime 기능 내장 |
+| **Supabase** | — | Vercel 서버리스 환경에서 로컬 DB 사용 불가 → 클라우드 PostgreSQL 필수. 관리형 인프라 및 Row Level Security 내장 |
 | **Prisma** | 6.x | TypeScript 타입 자동 생성으로 `any` 없는 DB 접근 보장, 마이그레이션 관리 용이 |
 | **NextAuth.js** | 4.x | Next.js App Router 공식 권장 인증 라이브러리, 세션 기반 역할(ADMIN/VIEWER) 관리 |
 | **shadcn/ui** | 4.x | 컴포넌트 소스를 직접 소유하여 Stone/Teal/Rose 팔레트 커스터마이징 용이 |
@@ -43,7 +43,7 @@
 
 | 기술 | 검토 대안 | 선택하지 않은 이유 |
 |------|-----------|-------------------|
-| Database | PlanetScale, Neon | Supabase의 Realtime 기능이 실시간 대시보드 요구사항에 직접 부합 |
+| Database | PlanetScale, Neon | Supabase는 관리형 PostgreSQL + RLS + 풍부한 대시보드를 무료 플랜에서 제공하며 Prisma와 완벽 호환 |
 | Auth | Clerk, custom JWT | NextAuth.js가 Next.js App Router와 가장 자연스럽게 통합되며 무료 |
 | UI Library | MUI, Chakra UI | shadcn/ui는 소스 소유 방식으로 디자인 시스템 완전 제어 가능 |
 | UI Primitive | Radix UI (`@radix-ui/react-*`) | shadcn/ui v4 공식 마이그레이션 대상 → Base UI로 교체됨 |

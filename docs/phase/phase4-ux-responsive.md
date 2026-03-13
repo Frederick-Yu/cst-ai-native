@@ -1,7 +1,7 @@
 # Phase 4 — UX 완성 & 반응형 (D+6 ~ D+7)
 
 **목표:** UX 완성 및 반응형 적용
-**완료 기준:** 모바일·데스크탑 모두에서 핵심 기능 사용 가능, 실시간 대시보드 동작
+**완료 기준:** 모바일·데스크탑 모두에서 핵심 기능 사용 가능, 동적 서버사이드 렌더링 대시보드 동작
 
 ---
 
@@ -126,14 +126,15 @@ export function DashboardStats({ customerCount, recentAuditCount }: DashboardSta
 
 ---
 
-## 3. 최근 변경 내역 위젯 (Supabase Realtime)
+## 3. 최근 변경 내역 위젯 (서버사이드 렌더링)
+
+> **구현 방식:** `force-dynamic` 서버사이드 렌더링으로 페이지 접속 시 최신 데이터 제공.
+> Supabase Realtime 클라이언트 구독은 현재 미구현 상태이며, 새로고침 없이 실시간 갱신이 필요할 경우 향후 추가할 수 있음.
 
 `src/components/dashboard/recent-changes-widget.tsx`:
 ```typescript
 "use client";
 
-import { useEffect, useState } from "react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
@@ -153,27 +154,7 @@ interface Props {
 }
 
 export function RecentChangesWidget({ initialChanges }: Props) {
-  const [changes, setChanges] = useState(initialChanges);
-  const supabase = createClientComponentClient();
-
-  useEffect(() => {
-    // Supabase Realtime: histories 테이블 변경 구독
-    const channel = supabase
-      .channel("recent-changes")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "histories" },
-        async () => {
-          // 변경 감지 시 최신 데이터 재조회 (Server Action 호출)
-          const res = await fetch("/api/recent-changes");
-          const data = await res.json();
-          setChanges(data);
-        }
-      )
-      .subscribe();
-
-    return () => { supabase.removeChannel(channel); };
-  }, [supabase]);
+  const changes = initialChanges;
 
   const eventTypeBadge: Record<string, string> = {
     BUILD:         "bg-teal-100 text-teal-700",
@@ -492,7 +473,7 @@ export function NavBar() {
 | 항목 | 확인 방법 |
 |------|-----------|
 | 대시보드 통계 | 고객사 수 및 7일 감사 접근 수 표시 |
-| 실시간 위젯 | 다른 탭에서 이력 추가 시 위젯 자동 갱신 |
+| 최근 변경 위젯 | 페이지 접속 시 최신 이력 10건 표시 (서버사이드 렌더링) |
 | 복사 버튼 | 클릭 시 클립보드에 복사 및 체크 아이콘 표시 |
 | 모바일 네비 | 320px 너비에서 햄버거 메뉴 노출 |
 | 반응형 그리드 | 768px 기준 레이아웃 전환 확인 |
@@ -505,7 +486,7 @@ export function NavBar() {
 feat: 대시보드 실시간 위젯 및 반응형 UI 적용
 
 - 대시보드 통계 카드 및 최근 변경 내역 위젯 구현
-- Supabase Realtime 구독으로 histories 테이블 변경 실시간 반영
+- 최근 변경 내역 위젯: Server Component에서 Prisma로 최신 10건 조회 (force-dynamic)
 - 고객사 상세 페이지 lg:grid-cols-3 반응형 레이아웃 구현
 - SystemInfoCard: 각 필드별 클립보드 복사 버튼 배치
 - 모바일 햄버거 네비게이션 및 전 페이지 Mobile-first 반응형 적용

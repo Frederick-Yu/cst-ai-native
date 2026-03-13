@@ -3,7 +3,149 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum Role {
+  ADMIN
+  MANAGER
+  VIEWER
+}
+
+enum IndustryType {
+  FINANCE
+  HEALTHCARE
+  RETAIL
+  MANUFACTURING
+  IT
+  OTHER
+}
+
+enum ContractStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+  TERMINATED
+}
+
+enum StakeholderRole {
+  CONTACT
+  MANAGER
+  TECHNICAL
+  EXECUTIVE
+}
+
+enum EventType {
+  INSTALLATION
+  MAINTENANCE
+  INCIDENT
+  UPDATE
+  MEETING
+  OTHER
+}
+
+enum AssetType {
+  SERVER
+  DATABASE
+  APPLICATION
+  NETWORK
+  STORAGE
+  OTHER
+}
+
+enum ServiceEnv {
+  PRODUCTION
+  STAGING
+  DEVELOPMENT
+}
+
+enum ActionType {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  ACCESS
+}
+
+// ─── Models ──────────────────────────────────────────────────────────────────
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  name         String
+  passwordHash String?
+  role         Role       @default(VIEWER)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  auditLogs    AuditLog[]
+  histories    History[]
+}
+
+model Customer {
+  id             String         @id @default(cuid())
+  name           String
+  industryType   IndustryType   @default(OTHER)
+  contractStatus ContractStatus @default(ACTIVE)
+  description    String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  stakeholders   Stakeholder[]
+  histories      History[]
+  systemInfos    SystemInfo[]
+  auditLogs      AuditLog[]
+}
+
+model Stakeholder {
+  id         String          @id @default(cuid())
+  customerId String
+  name       String
+  role       StakeholderRole @default(CONTACT)
+  email      String?
+  phone      String?
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  customer   Customer        @relation(fields: [customerId], references: [id], onDelete: Cascade)
+}
+
+model History {
+  id         String    @id @default(cuid())
+  customerId String
+  userId     String
+  eventType  EventType @default(OTHER)
+  title      String
+  content    String
+  createdAt  DateTime  @default(now())
+  customer   Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  user       User      @relation(fields: [userId], references: [id])
+}
+
+model SystemInfo {
+  id           String     @id @default(cuid())
+  customerId   String
+  assetType    AssetType  @default(OTHER)
+  serviceEnv   ServiceEnv @default(PRODUCTION)
+  name         String
+  description  String?
+  host         String?
+  port         Int?
+  username     String?
+  passwordHash String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  customer     Customer   @relation(fields: [customerId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id           String     @id @default(cuid())
+  userId       String
+  customerId   String?
+  actionType   ActionType
+  targetData   String
+  accessReason String
+  createdAt    DateTime   @default(now())
+  user         User       @relation(fields: [userId], references: [id])
+  customer     Customer?  @relation(fields: [customerId], references: [id])
 }

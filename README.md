@@ -1,6 +1,11 @@
 # Customer Support Tracker
 
+[![CI](https://github.com/Frederick-Yu/cst-ai-native/actions/workflows/ci.yml/badge.svg)](https://github.com/Frederick-Yu/cst-ai-native/actions/workflows/ci.yml)
+
 고객사 통합 이력 관리 시스템 — 구축부터 유지보수까지 모든 히스토리를 단일 대시보드에서 관리하고, 민감 정보 접근에 대한 영구적인 Audit Trail을 제공합니다.
+
+**배포 URL:** https://cst-ai-native.vercel.app/
+**현재 단계:** ✅ Phase 5 완료 — `v1.0-release`
 
 ---
 
@@ -151,6 +156,8 @@ pnpm dev
 ```
 
 브라우저에서 `http://localhost:3000` 접속
+
+> **프로덕션 배포:** https://cst-ai-native.vercel.app/
 
 ### 주요 스크립트
 

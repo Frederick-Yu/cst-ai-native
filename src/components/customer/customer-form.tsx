@@ -50,10 +50,12 @@ export function CustomerForm() {
 
   function getFieldError(field: string): string | undefined {
     if (state?.error && typeof state.error === "object") {
-      const errors = (state.error as Record<string, string[]>)[field];
-      return errors?.[0];
+      return (state.error as Record<string, string[]>)[field]?.[0];
     }
+    return undefined;
   }
+
+  const nameError = getFieldError("name");
 
   return (
     <form action={formAction} className="flex flex-col gap-5">
@@ -68,9 +70,11 @@ export function CustomerForm() {
           placeholder="예: (주)테스트컴퍼니"
           required
           aria-required="true"
+          aria-describedby={nameError ? "name-error" : undefined}
+          aria-invalid={nameError ? true : undefined}
         />
-        {getFieldError("name") && (
-          <p className="text-xs text-rose-500">{getFieldError("name")}</p>
+        {nameError && (
+          <p id="name-error" role="alert" className="text-xs text-rose-500">{nameError}</p>
         )}
       </div>
 

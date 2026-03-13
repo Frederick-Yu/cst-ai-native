@@ -103,5 +103,5 @@ export async function createCustomer(formData: FormData) {
   }
 
   revalidatePath("/customers");
-  redirect(`/customers/${customerId}`);
+  return { success: true, customerId };
 }

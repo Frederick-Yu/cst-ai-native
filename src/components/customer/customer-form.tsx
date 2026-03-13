@@ -1,7 +1,8 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { createCustomer } from "@/actions/customer.actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,6 +26,8 @@ const CONTRACT_STATUS_OPTIONS: { value: ContractStatus; label: string }[] = [
 ];
 
 type FormState = {
+  success?: boolean;
+  customerId?: string;
   error?: string | Record<string, string[]>;
 } | null;
 
@@ -37,6 +40,13 @@ export function CustomerForm() {
     },
     null
   );
+
+  useEffect(() => {
+    if (state?.success && state.customerId) {
+      toast.success("고객사가 등록되었습니다.");
+      router.push(`/customers/${state.customerId}`);
+    }
+  }, [state, router]);
 
   function getFieldError(field: string): string | undefined {
     if (state?.error && typeof state.error === "object") {

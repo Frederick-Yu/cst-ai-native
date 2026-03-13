@@ -15,6 +15,13 @@ export default function CustomersLoading() {
         </div>
       </div>
 
+      {/* 상태 필터 스켈레톤 */}
+      <div className="mb-6 flex flex-wrap gap-2">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <Skeleton key={i} className="h-6 w-14 rounded-full" />
+        ))}
+      </div>
+
       {/* 카드 그리드 */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 6 }).map((_, i) => (

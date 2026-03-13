@@ -1,6 +1,9 @@
+"use client";
+
 import { StakeholderRole } from "@prisma/client";
 import { Badge } from "@/components/ui/badge";
 import { Mail, Phone } from "lucide-react";
+import { EditStakeholderDialog } from "./edit-stakeholder-dialog";
 
 const ROLE_LABELS: Record<StakeholderRole, string> = {
   CONTACT: "담당자",
@@ -18,6 +21,7 @@ const ROLE_COLORS: Record<StakeholderRole, string> = {
 
 interface Stakeholder {
   id: string;
+  customerId: string;
   name: string;
   role: StakeholderRole;
   email: string | null;
@@ -37,9 +41,12 @@ export function StakeholderList({ stakeholders }: { stakeholders: Stakeholder[] 
         <li key={s.id} className="py-3">
           <div className="flex items-center justify-between gap-2">
             <span className="font-medium text-sm text-stone-800">{s.name}</span>
-            <Badge className={`shrink-0 text-xs ${ROLE_COLORS[s.role]}`}>
-              {ROLE_LABELS[s.role]}
-            </Badge>
+            <div className="flex items-center gap-1">
+              <Badge className={`shrink-0 text-xs ${ROLE_COLORS[s.role]}`}>
+                {ROLE_LABELS[s.role]}
+              </Badge>
+              <EditStakeholderDialog stakeholder={s} />
+            </div>
           </div>
           <div className="mt-1 flex flex-col gap-0.5 text-xs text-stone-500">
             {s.email && (

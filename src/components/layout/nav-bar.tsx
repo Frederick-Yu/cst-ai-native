@@ -5,23 +5,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { ShieldAlert, Menu, X, LogOut, LayoutDashboard, Building2, ScrollText } from "lucide-react";
-import { Role } from "@prisma/client";
 
 const navLinks = [
   { href: "/", label: "대시보드", icon: LayoutDashboard },
   { href: "/customers", label: "고객사", icon: Building2 },
+  { href: "/audit-logs", label: "감사 로그", icon: ScrollText },
 ];
 
 export function NavBar() {
   const pathname = usePathname();
   const { data: session } = useSession();
   const [menuOpen, setMenuOpen] = useState(false);
-
-  const isAdmin = session?.user?.role === Role.ADMIN;
-
-  const allLinks = isAdmin
-    ? [...navLinks, { href: "/admin/audit-logs", label: "감사 로그", icon: ScrollText }]
-    : navLinks;
 
   return (
     <header className="sticky top-0 z-50 h-14 w-full border-b border-stone-800 bg-stone-900">
@@ -34,7 +28,7 @@ export function NavBar() {
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-1 md:flex" aria-label="메인 내비게이션">
-          {allLinks.map(({ href, label, icon: Icon }) => (
+          {navLinks.map(({ href, label, icon: Icon }) => (
             <Link
               key={href}
               href={href}
@@ -80,7 +74,7 @@ export function NavBar() {
           aria-label="모바일 내비게이션"
         >
           <div className="flex flex-col gap-1 pt-2">
-            {allLinks.map(({ href, label, icon: Icon }) => (
+            {navLinks.map(({ href, label, icon: Icon }) => (
               <Link
                 key={href}
                 href={href}

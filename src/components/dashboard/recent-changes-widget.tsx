@@ -6,6 +6,7 @@ import { ko } from "date-fns/locale";
 import { EventType } from "@prisma/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { ArrowRight } from "lucide-react";
 
 const EVENT_TYPE_LABELS: Record<EventType, string> = {
   INSTALLATION: "구축",
@@ -43,8 +44,15 @@ interface RecentChangesWidgetProps {
 export function RecentChangesWidget({ initialChanges }: RecentChangesWidgetProps) {
   return (
     <Card className="border-stone-200 bg-white">
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-base text-stone-800">최근 변경 이력</CardTitle>
+        <Link
+          href="/customers"
+          className="flex items-center gap-1 text-xs text-teal-600 hover:underline"
+        >
+          전체 고객사
+          <ArrowRight className="size-3" aria-hidden="true" />
+        </Link>
       </CardHeader>
       <CardContent>
         {initialChanges.length === 0 ? (

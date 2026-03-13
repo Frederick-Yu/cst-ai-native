@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Copy, Check, Server } from "lucide-react";
 import { PasswordRevealDialog } from "./password-reveal-dialog";
+import { EditSystemInfoDialog } from "./edit-system-info-dialog";
 
 const ASSET_TYPE_LABELS: Record<AssetType, string> = {
   SERVER: "서버",
@@ -54,6 +55,7 @@ function CopyButton({ value, label }: { value: string; label: string }) {
 
 interface SystemInfo {
   id: string;
+  customerId: string;
   name: string;
   assetType: AssetType;
   serviceEnv: ServiceEnv;
@@ -73,9 +75,12 @@ export function SystemInfoCard({ systemInfo }: { systemInfo: SystemInfo }) {
             <Server className="size-4 text-stone-400" aria-hidden="true" />
             <CardTitle className="text-sm font-medium text-stone-800">{systemInfo.name}</CardTitle>
           </div>
-          <Badge className={`shrink-0 text-xs ${SERVICE_ENV_COLORS[systemInfo.serviceEnv]}`}>
-            {SERVICE_ENV_LABELS[systemInfo.serviceEnv]}
-          </Badge>
+          <div className="flex items-center gap-1">
+            <Badge className={`shrink-0 text-xs ${SERVICE_ENV_COLORS[systemInfo.serviceEnv]}`}>
+              {SERVICE_ENV_LABELS[systemInfo.serviceEnv]}
+            </Badge>
+            <EditSystemInfoDialog systemInfo={systemInfo} />
+          </div>
         </div>
         <p className="text-xs text-stone-400">{ASSET_TYPE_LABELS[systemInfo.assetType]}</p>
       </CardHeader>

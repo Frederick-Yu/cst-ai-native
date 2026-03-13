@@ -10,6 +10,7 @@ import { StakeholderList } from "@/components/customer/stakeholder-list";
 import { AddStakeholderDialog } from "@/components/customer/add-stakeholder-dialog";
 import { AddSystemInfoDialog } from "@/components/customer/add-system-info-dialog";
 import { AddHistoryDialog } from "@/components/customer/add-history-dialog";
+import { ChangeHistoryTabs } from "@/components/customer/change-history-tabs";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ContractStatus } from "@prisma/client";
@@ -36,17 +37,24 @@ interface CustomerDetailPageProps {
 export default async function CustomerDetailPage({ params }: CustomerDetailPageProps) {
   const { id } = await params;
 
-  const customer = await prisma.customer.findUnique({
-    where: { id },
-    include: {
-      stakeholders: { orderBy: { role: "asc" } },
-      histories: {
-        orderBy: { createdAt: "desc" },
-        include: { user: { select: { name: true } } },
+  const [customer, auditLogs] = await Promise.all([
+    prisma.customer.findUnique({
+      where: { id },
+      include: {
+        stakeholders: { orderBy: { role: "asc" } },
+        histories: {
+          orderBy: { createdAt: "desc" },
+          include: { user: { select: { name: true } } },
+        },
+        systemInfos: { orderBy: { createdAt: "asc" } },
       },
-      systemInfos: { orderBy: { createdAt: "asc" } },
-    },
-  });
+    }),
+    prisma.auditLog.findMany({
+      where: { customerId: id },
+      orderBy: { createdAt: "desc" },
+      include: { user: { select: { name: true } } },
+    }),
+  ]);
 
   if (!customer) {
     notFound();
@@ -76,6 +84,19 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
             기본 정보 수정
           </Link>
         </div>
+
+        {/* 변경 이력 */}
+        <Card className="mb-6 border-stone-200 bg-white">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-stone-700">
+              변경 이력
+              <span className="ml-2 text-xs font-normal text-stone-400">({auditLogs.length}건)</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ChangeHistoryTabs auditLogs={auditLogs} />
+          </CardContent>
+        </Card>
 
         {/* 2열 레이아웃 */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">

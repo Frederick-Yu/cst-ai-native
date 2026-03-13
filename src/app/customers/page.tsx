@@ -1,10 +1,12 @@
 export const dynamic = "force-dynamic";
 
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { AuthenticatedLayout } from "@/components/layout/authenticated-layout";
 import { CustomerCard } from "@/components/customer/customer-card";
 import { CustomerSearchBar } from "@/components/customer/customer-search-bar";
 import { ContractStatus } from "@prisma/client";
+import { Plus } from "lucide-react";
 
 interface CustomersPageProps {
   searchParams: Promise<{ q?: string; status?: string }>;
@@ -40,7 +42,16 @@ export default async function CustomersPage({ searchParams }: CustomersPageProps
               총 {customers.length}개 고객사
             </p>
           </div>
-          <CustomerSearchBar defaultValue={q} />
+          <div className="flex items-center gap-2">
+            <CustomerSearchBar defaultValue={q} />
+            <Link
+              href="/customers/new"
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-teal-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-500"
+            >
+              <Plus className="size-4" aria-hidden="true" />
+              고객사 등록
+            </Link>
+          </div>
         </div>
 
         {customers.length === 0 ? (

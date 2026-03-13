@@ -15,6 +15,9 @@ jest.mock("next/navigation", () => ({
     push: mockPush,
     refresh: mockRefresh,
   }),
+  useSearchParams: () => ({
+    get: jest.fn().mockReturnValue(null),
+  }),
 }));
 
 // UI 컴포넌트 mock (base-ui 의존성 제거)
@@ -76,7 +79,7 @@ describe("LoginForm", () => {
     fireEvent.submit(screen.getByRole("form", { name: "로그인 폼" }));
 
     await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith("/dashboard");
+      expect(mockPush).toHaveBeenCalledWith("/");
     });
   });
 

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ContractStatus, IndustryType } from "@prisma/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Building2, Clock, Server } from "lucide-react";
+import { Clock, Server } from "lucide-react";
 
 const CONTRACT_STATUS_LABELS: Record<ContractStatus, string> = {
   ACTIVE: "계약 중",

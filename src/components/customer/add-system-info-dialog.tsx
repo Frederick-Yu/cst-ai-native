@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createSystemInfo } from "@/actions/system-info.actions";
 import { AssetType, ServiceEnv } from "@prisma/client";
+import { toast } from "sonner";
 
 const ASSET_TYPE_OPTIONS: { value: AssetType; label: string }[] = [
   { value: "SERVER", label: "서버" },
@@ -37,6 +38,7 @@ export function AddSystemInfoDialog({ customerId }: { customerId: string }) {
       const result = await createSystemInfo(formData);
       if (result.success) {
         setOpen(false);
+        toast.success("시스템 정보가 추가되었습니다");
         return { success: true };
       }
       return result;

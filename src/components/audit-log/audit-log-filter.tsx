@@ -7,7 +7,6 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { Search, ShieldCheck, User, Server, Settings, FileText } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 
 const ACTION_TYPE_LABELS: Record<ActionType, string> = {
   CREATE: "등록",

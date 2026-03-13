@@ -47,13 +47,13 @@ export async function updateCustomer(formData: FormData) {
         },
       }),
     ]);
-
-    revalidatePath(`/customers/${parsed.data.customerId}`);
-    revalidatePath("/customers");
-    redirect(`/customers/${parsed.data.customerId}`);
-  } catch (error) {
-    throw error;
+  } catch {
+    return { success: false, error: "저장 중 오류가 발생했습니다" };
   }
+
+  revalidatePath(`/customers/${parsed.data.customerId}`);
+  revalidatePath("/customers");
+  redirect(`/customers/${parsed.data.customerId}`);
 }
 
 const CreateCustomerSchema = z.object({
@@ -72,6 +72,7 @@ export async function createCustomer(formData: FormData) {
     return { success: false, error: parsed.error.flatten().fieldErrors };
   }
 
+  let customerId: string;
   try {
     const customer = await prisma.$transaction(async (tx) => {
       const created = await tx.customer.create({
@@ -96,10 +97,11 @@ export async function createCustomer(formData: FormData) {
       return created;
     });
 
-    revalidatePath("/customers");
-    redirect(`/customers/${customer.id}`);
-  } catch (error) {
-    // redirect()는 내부적으로 throw를 사용하므로 re-throw 필요
-    throw error;
+    customerId = customer.id;
+  } catch {
+    return { success: false, error: "저장 중 오류가 발생했습니다" };
   }
+
+  revalidatePath("/customers");
+  redirect(`/customers/${customerId}`);
 }

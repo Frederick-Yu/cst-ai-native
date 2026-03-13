@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createHistory } from "@/actions/history.actions";
 import { EventType } from "@prisma/client";
+import { toast } from "sonner";
 
 const EVENT_TYPE_OPTIONS: { value: EventType; label: string }[] = [
   { value: "INSTALLATION", label: "구축" },
@@ -31,6 +32,7 @@ export function AddHistoryDialog({ customerId }: { customerId: string }) {
       const result = await createHistory(formData);
       if (result.success) {
         setOpen(false);
+        toast.success("이력이 등록되었습니다");
         return { success: true };
       }
       return result;

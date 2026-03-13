@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { updateSystemInfo } from "@/actions/system-info.actions";
 import { AssetType, ServiceEnv } from "@prisma/client";
+import { toast } from "sonner";
 
 const ASSET_TYPE_OPTIONS: { value: AssetType; label: string }[] = [
   { value: "SERVER", label: "서버" },
@@ -49,6 +50,7 @@ export function EditSystemInfoDialog({ systemInfo }: { systemInfo: SystemInfoDat
       const result = await updateSystemInfo(formData);
       if (result.success) {
         setOpen(false);
+        toast.success("시스템 정보가 수정되었습니다");
         return { success: true };
       }
       return result;

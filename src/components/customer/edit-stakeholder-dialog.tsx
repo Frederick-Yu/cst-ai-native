@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { updateStakeholder } from "@/actions/stakeholder.actions";
 import { StakeholderRole } from "@prisma/client";
+import { toast } from "sonner";
 
 const ROLE_OPTIONS: { value: StakeholderRole; label: string }[] = [
   { value: "CONTACT", label: "담당자" },
@@ -38,6 +39,7 @@ export function EditStakeholderDialog({ stakeholder }: { stakeholder: Stakeholde
       const result = await updateStakeholder(formData);
       if (result.success) {
         setOpen(false);
+        toast.success("담당자 정보가 수정되었습니다");
         return { success: true };
       }
       return result;

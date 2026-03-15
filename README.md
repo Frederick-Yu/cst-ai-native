@@ -109,6 +109,27 @@ docs/
 
 ---
 
+## 배포 환경
+
+| 환경 | 트리거 | URL |
+|------|--------|-----|
+| **Production** | `main` 브랜치 push | https://cst-ai-native.vercel.app |
+| **Preview** | PR 생성 / feature 브랜치 push | `https://{project}-git-{branch}-{user}.vercel.app` |
+
+### Vercel Dashboard 환경 변수 설정
+
+Preview 배포가 정상 동작하려면 **Vercel Dashboard → Settings → Environment Variables** 에서 환경별 분리 설정이 필요합니다.
+
+| 변수 | Production | Preview |
+|------|------------|---------|
+| `DATABASE_URL` | Prisma Postgres 운영 DB URL | Prisma Postgres Preview DB URL |
+| `NEXTAUTH_SECRET` | 공통 시크릿 | 공통 시크릿 |
+| `NEXTAUTH_URL` | `https://cst-ai-native.vercel.app` | `https://$VERCEL_URL` |
+
+> **`NEXTAUTH_URL` Preview 설정:** Vercel Dashboard에서 Preview 환경의 값을 `https://$VERCEL_URL` 로 입력하면 PR마다 동적으로 생성되는 고유 URL이 자동 주입됩니다.
+
+---
+
 ## 로컬 실행 가이드
 
 ### 사전 요구사항
@@ -190,19 +211,22 @@ User     ──< AuditLog      (감사 로그, access_reason 필수)
 
 ## 테스트 현황
 
-`pnpm test` 실행 시 **11개 테스트 스위트 / 81개 케이스** 전부 통과.
+`pnpm test` 실행 시 **14개 테스트 스위트 / 107개 케이스** 전부 통과.
 
 | 테스트 파일 | 케이스 | 검증 대상 |
 |-------------|:------:|-----------|
-| `audit.actions.test.ts` | 6 | `revealPassword` + AuditLog 트랜잭션 필수 기록 |
+| `audit.actions.test.ts` | 6 | `revealPassword` + AuditLog 트랜잭션 인자 검증 |
 | `customer.actions.test.ts` | 7 | 고객사 생성·수정 + `change_reason` Zod 강제 |
 | `auth.actions.test.ts` | 6 | 회원가입 + bcrypt 해싱 |
-| `stakeholder.actions.test.ts` | 8 | 담당자 CRUD + 권한 검증 |
-| `system-info.actions.test.ts` | 8 | 시스템 정보 CRUD + 비밀번호 필드 처리 |
-| `history.actions.test.ts` | 5 | 이력 생성 + AuditLog 자동 기록 |
+| `stakeholder.actions.test.ts` | 8 | 담당자 CRUD + AuditLog 트랜잭션 인자 검증 |
+| `system-info.actions.test.ts` | 11 | 시스템 정보 CRUD + 포트 경계값 + AuditLog 검증 |
+| `history.actions.test.ts` | 5 | 이력 생성 + AuditLog 트랜잭션 인자 검증 |
 | `zod-schemas.test.ts` | 8 | `change_reason` / `access_reason` 5자 이상 검증 |
-| `password-reveal-dialog.test.tsx` | 5 | ARIA 접근성 + 조회 플로우 |
+| `password-reveal-dialog.test.tsx` | 11 | ARIA + 조회 플로우 + 상태 초기화 + 클립보드 |
 | `customer-form.test.tsx` | 9 | 폼 필드 렌더링 + 에러 메시지 |
+| `add-stakeholder-dialog.test.tsx` | 6 | 담당자 추가 폼 렌더링 + 에러 처리 |
+| `add-history-dialog.test.tsx` | 6 | 이력 추가 폼 렌더링 + 에러 처리 |
+| `add-system-info-dialog.test.tsx` | 6 | 시스템 정보 추가 폼 렌더링 + 에러 처리 |
 | `login-form.test.tsx` | 7 | 인증 플로우 + 실패 처리 |
 | `auth.test.ts` | 7 | `authorize` 로직 (비밀번호 불일치·미존재 사용자) |
 

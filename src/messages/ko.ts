@@ -28,13 +28,17 @@ export const messages = {
     nameRequired: "시스템명은 필수입니다",
     accessReasonMin: "조회 사유는 5자 이상 입력해야 합니다",
     notFound: "수정하려는 시스템 정보를 찾을 수 없습니다",
+    deleteNotFound: "삭제하려는 시스템 정보를 찾을 수 없습니다",
     systemNotFound: "시스템 정보를 찾을 수 없습니다",
     passwordNotFound: "저장된 비밀번호가 없습니다",
     fetchFailed: "조회 중 오류가 발생했습니다",
+    deleteFailed: "삭제 중 오류가 발생했습니다",
   },
   stakeholder: {
     nameRequired: "담당자명은 필수입니다",
     emailInvalid: "올바른 이메일 형식이 아닙니다",
     notFound: "수정하려는 담당자를 찾을 수 없습니다",
+    deleteNotFound: "삭제하려는 담당자를 찾을 수 없습니다",
+    deleteFailed: "삭제 중 오류가 발생했습니다",
   },
 } as const;

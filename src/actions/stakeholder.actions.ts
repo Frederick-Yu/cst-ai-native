@@ -69,6 +69,49 @@ const CreateStakeholderSchema = z.object({
   phone: z.string().optional(),
 });
 
+const DeleteStakeholderSchema = z.object({
+  stakeholderId: z.string().min(1),
+  customerId: z.string().min(1),
+  stakeholderName: z.string().min(1),
+  change_reason: z.string().min(5, m.common.changeReasonMin),
+});
+
+export async function deleteStakeholder(formData: FormData) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user) return { success: false, error: m.common.authRequired };
+
+  const parsed = DeleteStakeholderSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) {
+    return { success: false, error: parsed.error.flatten().fieldErrors };
+  }
+
+  try {
+    await prisma.$transaction([
+      prisma.stakeholder.delete({
+        where: { id: parsed.data.stakeholderId },
+      }),
+      prisma.auditLog.create({
+        data: {
+          userId: session.user.id,
+          customerId: parsed.data.customerId,
+          actionType: "DELETE",
+          targetData: `Stakeholder(${parsed.data.stakeholderName})`,
+          accessReason: parsed.data.change_reason,
+        },
+      }),
+    ]);
+
+    revalidatePath(`/customers/${parsed.data.customerId}`);
+    return { success: true };
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
+      return { success: false, error: m.stakeholder.deleteNotFound };
+    }
+    console.error("[deleteStakeholder]", getErrorMessage(error));
+    return { success: false, error: m.stakeholder.deleteFailed };
+  }
+}
+
 export async function createStakeholder(formData: FormData) {
   const session = await getServerSession(authOptions);
   if (!session?.user) return { success: false, error: m.common.authRequired };

@@ -33,6 +33,7 @@ export const messages = {
     passwordNotFound: "저장된 비밀번호가 없습니다",
     fetchFailed: "조회 중 오류가 발생했습니다",
     deleteFailed: "삭제 중 오류가 발생했습니다",
+    customerNotFound: "존재하지 않는 고객사입니다",
   },
   stakeholder: {
     nameRequired: "담당자명은 필수입니다",
@@ -40,5 +41,6 @@ export const messages = {
     notFound: "수정하려는 담당자를 찾을 수 없습니다",
     deleteNotFound: "삭제하려는 담당자를 찾을 수 없습니다",
     deleteFailed: "삭제 중 오류가 발생했습니다",
+    customerNotFound: "존재하지 않는 고객사입니다",
   },
 } as const;

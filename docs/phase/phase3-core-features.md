@@ -17,7 +17,6 @@
 - [x] Audit Log 열람 페이지 (관리자 전용)
 - [x] Skeleton UI 적용 (목록·상세 페이지)
 - [x] 커밋: `feat: 고객사 CRUD 및 비밀번호 조회 Audit Log 기록 기능 추가`
-- [x] git tag: `v0.3-core`
 
 > **✅ 완료** — 2026-03-13
 
@@ -539,5 +538,3 @@ feat: 고객사 CRUD 및 비밀번호 조회 Audit Log 기록 기능 추가
 - PasswordRevealDialog 컴포넌트: Rose 계열 경고 UI + 클립보드 복사
 - 관리자 전용 Audit Log 열람 페이지 (/admin/audit-logs)
 ```
-
-**git tag:** `v0.3-core`

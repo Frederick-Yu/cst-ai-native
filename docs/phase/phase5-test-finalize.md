@@ -1,7 +1,7 @@
 # Phase 5 — 테스트 & 마무리 (D+7 ~ D+8)
 
 **목표:** 테스트 작성 및 배포 마무리
-**완료 기준:** Jest 테스트 통과, CI 그린, `v1.0-release` 태그 생성
+**완료 기준:** Jest 테스트 통과, CI 그린
 
 ---
 
@@ -14,7 +14,6 @@
 - [x] 컴포넌트 테스트: PasswordRevealDialog ARIA 검증
 - [x] CI 파이프라인에 `pnpm test` 통합 확인
 - [x] 커밋 이력 정리 (Conventional Commits 준수 여부 검토)
-- [x] git tag: `v1.0-release`
 - [x] 커밋: `test: Audit Log 및 권한 검증 단위 테스트 추가`
 
 > **✅ 완료** — 2026-03-13
@@ -335,15 +334,6 @@ describe("PasswordRevealDialog", () => {
 | `feat: 대시보드 실시간 위젯 및 반응형 UI 적용` | 4 | ✅ |
 | `test: Audit Log 및 권한 검증 단위 테스트 추가` | 5 | ✅ |
 
-git tag 확인:
-```bash
-git tag -l
-# v0.1-skeleton
-# v0.2-schema
-# v0.3-core
-# v1.0-release
-```
-
 ---
 
 ## 8. 최종 배포 전 체크리스트
@@ -373,5 +363,3 @@ test: Audit Log 및 권한 검증 단위 테스트 추가
 - PasswordRevealDialog: ARIA 역할, 에러 메시지, 조회 성공 흐름 검증
 - CI 파이프라인 pnpm test 스텝 통합 완료
 ```
-
-**git tag:** `v1.0-release`

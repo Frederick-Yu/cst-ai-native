@@ -15,7 +15,6 @@
 - [x] 인증 레이아웃 컴포넌트 (`authenticated-layout.tsx`)
 - [x] Prisma seed 스크립트 (초기 관리자 계정)
 - [x] 커밋: `feat: Phase 2 스키마 & 인증 시스템 구현`
-- [x] git tag: `v0.2-schema`
 
 > **✅ 완료** — 2026-03-13
 
@@ -79,5 +78,3 @@ feat: Phase 2 스키마 & 인증 시스템 구현
 - 로그인 페이지 및 인증 레이아웃 컴포넌트 구현
 - Prisma seed: 초기 관리자 계정 생성
 ```
-
-**git tag:** `v0.2-schema` ← 미생성

@@ -16,7 +16,6 @@
 - [x] `.github/workflows/ci.yml` 작성
 - [x] `.env.local` 환경 변수 정의
 - [x] 커밋: `feat: 프로젝트 초기 설정 및 CI/CD 파이프라인 구성`
-- [x] git tag: `v0.1-skeleton`
 
 > **✅ 완료** — 2026-03-13
 
@@ -270,5 +269,3 @@ feat: 프로젝트 초기 설정 및 CI/CD 파이프라인 구성
 - GitHub Actions CI (Lint→TypeCheck→Test→Build) 파이프라인 구성
 - Vercel Production 배포 연동 완료
 ```
-
-**git tag:** `v0.1-skeleton`

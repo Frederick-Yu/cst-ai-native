@@ -4,16 +4,17 @@ import { z } from "zod";
 import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { messages as m } from "@/messages";
 
 const SignUpSchema = z
   .object({
-    name: z.string().min(1, "이름은 필수입니다"),
-    email: z.string().email("올바른 이메일 형식이 아닙니다"),
-    password: z.string().min(8, "비밀번호는 8자 이상이어야 합니다"),
-    confirmPassword: z.string().min(1, "비밀번호 확인을 입력하세요"),
+    name: z.string().min(1, m.auth.nameRequired),
+    email: z.string().email(m.auth.emailInvalid),
+    password: z.string().min(8, m.auth.passwordMin),
+    confirmPassword: z.string().min(1, m.auth.passwordConfirmRequired),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "비밀번호가 일치하지 않습니다",
+    message: m.auth.passwordMismatch,
     path: ["confirmPassword"],
   });
 
@@ -28,7 +29,7 @@ export async function signUp(formData: FormData) {
       where: { email: parsed.data.email },
     });
     if (existing) {
-      return { success: false, error: { email: ["이미 사용 중인 이메일입니다"] } };
+      return { success: false, error: { email: [m.auth.emailDuplicate] } };
     }
 
     const passwordHash = await bcrypt.hash(parsed.data.password, 12);
@@ -51,7 +52,7 @@ export async function signUp(formData: FormData) {
       });
     });
   } catch {
-    return { success: false, error: "회원가입 중 오류가 발생했습니다" };
+    return { success: false, error: m.auth.signUpFailed };
   }
 
   redirect("/login?registered=1");

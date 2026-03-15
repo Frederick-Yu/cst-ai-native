@@ -7,17 +7,18 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { EventType, Prisma } from "@prisma/client";
 import { getErrorMessage } from "@/lib/utils";
+import { messages as m } from "@/messages";
 
 const CreateHistorySchema = z.object({
   customerId: z.string().min(1),
   eventType: z.nativeEnum(EventType),
-  title: z.string().min(1, "제목은 필수입니다"),
-  content: z.string().min(1, "내용은 필수입니다"),
+  title: z.string().min(1, m.history.titleRequired),
+  content: z.string().min(1, m.history.contentRequired),
 });
 
 export async function createHistory(formData: FormData) {
   const session = await getServerSession(authOptions);
-  if (!session?.user) return { success: false, error: "인증이 필요합니다" };
+  if (!session?.user) return { success: false, error: m.common.authRequired };
 
   const raw = Object.fromEntries(formData);
   const parsed = CreateHistorySchema.safeParse(raw);
@@ -51,9 +52,9 @@ export async function createHistory(formData: FormData) {
     return { success: true };
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2003") {
-      return { success: false, error: "존재하지 않는 고객사입니다" };
+      return { success: false, error: m.history.customerNotFound };
     }
     console.error("[createHistory]", getErrorMessage(error));
-    return { success: false, error: "저장 중 오류가 발생했습니다" };
+    return { success: false, error: m.common.saveFailed };
   }
 }

@@ -7,11 +7,12 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { AssetType, ServiceEnv, Prisma } from "@prisma/client";
 import { getErrorMessage } from "@/lib/utils";
+import { messages as m } from "@/messages";
 
 const UpdateSystemInfoSchema = z.object({
   systemInfoId: z.string().min(1),
   customerId: z.string().min(1),
-  name: z.string().min(1, "시스템명은 필수입니다"),
+  name: z.string().min(1, m.systemInfo.nameRequired),
   assetType: z.nativeEnum(AssetType),
   serviceEnv: z.nativeEnum(ServiceEnv),
   description: z.string().optional(),
@@ -22,12 +23,12 @@ const UpdateSystemInfoSchema = z.object({
   ),
   username: z.string().optional(),
   passwordHash: z.string().optional(),
-  change_reason: z.string().min(5, "변경 사유는 5자 이상 입력해야 합니다"),
+  change_reason: z.string().min(5, m.common.changeReasonMin),
 });
 
 export async function updateSystemInfo(formData: FormData) {
   const session = await getServerSession(authOptions);
-  if (!session?.user) return { success: false, error: "인증이 필요합니다" };
+  if (!session?.user) return { success: false, error: m.common.authRequired };
 
   const raw = Object.fromEntries(formData);
   const parsed = UpdateSystemInfoSchema.safeParse(raw);
@@ -68,16 +69,16 @@ export async function updateSystemInfo(formData: FormData) {
     return { success: true };
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
-      return { success: false, error: "수정하려는 시스템 정보를 찾을 수 없습니다" };
+      return { success: false, error: m.systemInfo.notFound };
     }
     console.error("[updateSystemInfo]", getErrorMessage(error));
-    return { success: false, error: "저장 중 오류가 발생했습니다" };
+    return { success: false, error: m.common.saveFailed };
   }
 }
 
 const CreateSystemInfoSchema = z.object({
   customerId: z.string().min(1),
-  name: z.string().min(1, "시스템명은 필수입니다"),
+  name: z.string().min(1, m.systemInfo.nameRequired),
   assetType: z.nativeEnum(AssetType),
   serviceEnv: z.nativeEnum(ServiceEnv),
   description: z.string().optional(),
@@ -92,7 +93,7 @@ const CreateSystemInfoSchema = z.object({
 
 export async function createSystemInfo(formData: FormData) {
   const session = await getServerSession(authOptions);
-  if (!session?.user) return { success: false, error: "인증이 필요합니다" };
+  if (!session?.user) return { success: false, error: m.common.authRequired };
 
   const raw = Object.fromEntries(formData);
   const parsed = CreateSystemInfoSchema.safeParse(raw);
@@ -130,6 +131,6 @@ export async function createSystemInfo(formData: FormData) {
     return { success: true };
   } catch (error) {
     console.error("[createSystemInfo]", getErrorMessage(error));
-    return { success: false, error: "저장 중 오류가 발생했습니다" };
+    return { success: false, error: m.common.saveFailed };
   }
 }

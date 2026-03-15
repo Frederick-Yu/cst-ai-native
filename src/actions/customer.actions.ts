@@ -8,19 +8,20 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { IndustryType, ContractStatus, Prisma } from "@prisma/client";
 import { getErrorMessage } from "@/lib/utils";
+import { messages as m } from "@/messages";
 
 const UpdateCustomerSchema = z.object({
   customerId: z.string().min(1),
-  name: z.string().min(1, "고객사명은 필수입니다"),
+  name: z.string().min(1, m.customer.nameRequired),
   industryType: z.nativeEnum(IndustryType),
   contractStatus: z.nativeEnum(ContractStatus),
   description: z.string().optional(),
-  change_reason: z.string().min(5, "변경 사유는 5자 이상 입력해야 합니다"),
+  change_reason: z.string().min(5, m.common.changeReasonMin),
 });
 
 export async function updateCustomer(formData: FormData) {
   const session = await getServerSession(authOptions);
-  if (!session?.user) return { success: false, error: "인증이 필요합니다" };
+  if (!session?.user) return { success: false, error: m.common.authRequired };
 
   const parsed = UpdateCustomerSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
@@ -50,10 +51,10 @@ export async function updateCustomer(formData: FormData) {
     ]);
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
-      return { success: false, error: "수정하려는 고객사를 찾을 수 없습니다" };
+      return { success: false, error: m.customer.notFound };
     }
     console.error("[updateCustomer]", getErrorMessage(error));
-    return { success: false, error: "저장 중 오류가 발생했습니다" };
+    return { success: false, error: m.common.saveFailed };
   }
 
   revalidatePath(`/customers/${parsed.data.customerId}`);
@@ -62,7 +63,7 @@ export async function updateCustomer(formData: FormData) {
 }
 
 const CreateCustomerSchema = z.object({
-  name: z.string().min(1, "고객사명은 필수입니다"),
+  name: z.string().min(1, m.customer.nameRequired),
   industryType: z.nativeEnum(IndustryType),
   contractStatus: z.nativeEnum(ContractStatus),
   description: z.string().optional(),
@@ -70,7 +71,7 @@ const CreateCustomerSchema = z.object({
 
 export async function createCustomer(formData: FormData) {
   const session = await getServerSession(authOptions);
-  if (!session?.user) return { success: false, error: "인증이 필요합니다" };
+  if (!session?.user) return { success: false, error: m.common.authRequired };
 
   const parsed = CreateCustomerSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
@@ -105,10 +106,10 @@ export async function createCustomer(formData: FormData) {
     customerId = customer.id;
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
-      return { success: false, error: "이미 등록된 고객사명입니다" };
+      return { success: false, error: m.customer.duplicateName };
     }
     console.error("[createCustomer]", getErrorMessage(error));
-    return { success: false, error: "저장 중 오류가 발생했습니다" };
+    return { success: false, error: m.common.saveFailed };
   }
 
   revalidatePath("/customers");

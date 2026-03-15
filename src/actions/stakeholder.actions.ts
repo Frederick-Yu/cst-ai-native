@@ -7,20 +7,21 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { StakeholderRole, Prisma } from "@prisma/client";
 import { getErrorMessage } from "@/lib/utils";
+import { messages as m } from "@/messages";
 
 const UpdateStakeholderSchema = z.object({
   stakeholderId: z.string().min(1),
   customerId: z.string().min(1),
-  name: z.string().min(1, "담당자명은 필수입니다"),
+  name: z.string().min(1, m.stakeholder.nameRequired),
   role: z.nativeEnum(StakeholderRole),
-  email: z.string().email("올바른 이메일 형식이 아닙니다").optional().or(z.literal("")),
+  email: z.string().email(m.stakeholder.emailInvalid).optional().or(z.literal("")),
   phone: z.string().optional(),
-  change_reason: z.string().min(5, "변경 사유는 5자 이상 입력해야 합니다"),
+  change_reason: z.string().min(5, m.common.changeReasonMin),
 });
 
 export async function updateStakeholder(formData: FormData) {
   const session = await getServerSession(authOptions);
-  if (!session?.user) return { success: false, error: "인증이 필요합니다" };
+  if (!session?.user) return { success: false, error: m.common.authRequired };
 
   const parsed = UpdateStakeholderSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
@@ -53,24 +54,24 @@ export async function updateStakeholder(formData: FormData) {
     return { success: true };
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
-      return { success: false, error: "수정하려는 담당자를 찾을 수 없습니다" };
+      return { success: false, error: m.stakeholder.notFound };
     }
     console.error("[updateStakeholder]", getErrorMessage(error));
-    return { success: false, error: "저장 중 오류가 발생했습니다" };
+    return { success: false, error: m.common.saveFailed };
   }
 }
 
 const CreateStakeholderSchema = z.object({
   customerId: z.string().min(1),
-  name: z.string().min(1, "담당자명은 필수입니다"),
+  name: z.string().min(1, m.stakeholder.nameRequired),
   role: z.nativeEnum(StakeholderRole),
-  email: z.string().email("올바른 이메일 형식이 아닙니다").optional().or(z.literal("")),
+  email: z.string().email(m.stakeholder.emailInvalid).optional().or(z.literal("")),
   phone: z.string().optional(),
 });
 
 export async function createStakeholder(formData: FormData) {
   const session = await getServerSession(authOptions);
-  if (!session?.user) return { success: false, error: "인증이 필요합니다" };
+  if (!session?.user) return { success: false, error: m.common.authRequired };
 
   const raw = Object.fromEntries(formData);
   const parsed = CreateStakeholderSchema.safeParse(raw);
@@ -104,6 +105,6 @@ export async function createStakeholder(formData: FormData) {
     return { success: true };
   } catch (error) {
     console.error("[createStakeholder]", getErrorMessage(error));
-    return { success: false, error: "저장 중 오류가 발생했습니다" };
+    return { success: false, error: m.common.saveFailed };
   }
 }

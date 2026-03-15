@@ -5,10 +5,11 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getErrorMessage } from "@/lib/utils";
+import { messages as m } from "@/messages";
 
 const RevealPasswordSchema = z.object({
-  systemInfoId: z.string().min(1, "시스템 정보 ID가 필요합니다"),
-  accessReason: z.string().min(5, "조회 사유는 5자 이상 입력해야 합니다"),
+  systemInfoId: z.string().min(1, m.systemInfo.idRequired),
+  accessReason: z.string().min(5, m.systemInfo.accessReasonMin),
 });
 
 type RevealPasswordResult =
@@ -21,7 +22,7 @@ export async function revealPassword(
 ): Promise<RevealPasswordResult> {
   const session = await getServerSession(authOptions);
   if (!session?.user) {
-    return { success: false, error: "인증이 필요합니다" };
+    return { success: false, error: m.common.authRequired };
   }
 
   const parsed = RevealPasswordSchema.safeParse({ systemInfoId, accessReason });
@@ -52,11 +53,11 @@ export async function revealPassword(
       return { found: true as const, hasPassword: true as const, passwordHash: systemInfo.passwordHash };
     });
 
-    if (!result.found) return { success: false, error: "시스템 정보를 찾을 수 없습니다" };
-    if (!result.hasPassword) return { success: false, error: "저장된 비밀번호가 없습니다" };
+    if (!result.found) return { success: false, error: m.systemInfo.systemNotFound };
+    if (!result.hasPassword) return { success: false, error: m.systemInfo.passwordNotFound };
     return { success: true, passwordHash: result.passwordHash };
   } catch (error) {
     console.error("[revealPassword]", getErrorMessage(error));
-    return { success: false, error: "조회 중 오류가 발생했습니다" };
+    return { success: false, error: m.systemInfo.fetchFailed };
   }
 }

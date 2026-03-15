@@ -56,31 +56,33 @@ export function ChangeHistoryTabs({ auditLogs }: { auditLogs: AuditLogEntry[] })
   return (
     <div className="flex flex-col gap-3">
       {/* 탭 헤더 */}
-      <div className="flex gap-1 border-b border-stone-100">
-        {TABS.map((tab) => {
-          const count = filterLogs(auditLogs, tab.key).length;
-          return (
-            <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
-              className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium transition-colors border-b-2 -mb-px ${
-                activeTab === tab.key
-                  ? "border-teal-500 text-teal-700"
-                  : "border-transparent text-stone-500 hover:text-stone-700"
-              }`}
-            >
-              {tab.icon}
-              {tab.label}
-              <span
-                className={`rounded-full px-1.5 py-0.5 text-xs ${
-                  activeTab === tab.key ? "bg-teal-100 text-teal-700" : "bg-stone-100 text-stone-500"
+      <div className="overflow-x-auto scrollbar-hide border-b border-stone-100">
+        <div className="flex gap-1 min-w-max">
+          {TABS.map((tab) => {
+            const count = filterLogs(auditLogs, tab.key).length;
+            return (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                className={`flex items-center gap-1.5 whitespace-nowrap px-3 py-2 text-xs font-medium transition-colors border-b-2 -mb-px ${
+                  activeTab === tab.key
+                    ? "border-teal-500 text-teal-700"
+                    : "border-transparent text-stone-500 hover:text-stone-700"
                 }`}
               >
-                {count}
-              </span>
-            </button>
-          );
-        })}
+                {tab.icon}
+                {tab.label}
+                <span
+                  className={`rounded-full px-1.5 py-0.5 text-xs ${
+                    activeTab === tab.key ? "bg-teal-100 text-teal-700" : "bg-stone-100 text-stone-500"
+                  }`}
+                >
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* 이력 목록 */}
@@ -100,15 +102,19 @@ export function ChangeHistoryTabs({ auditLogs }: { auditLogs: AuditLogEntry[] })
                   {ACTION_TYPE_LABELS[log.actionType]}
                 </span>
                 <span className="text-xs font-medium text-stone-700">{log.targetData}</span>
-                <span className="ml-auto text-xs text-stone-400">
-                  {formatDistanceToNow(new Date(log.createdAt), { addSuffix: true, locale: ko })}
-                </span>
               </div>
-              <div className="flex items-center gap-2 text-xs text-stone-500">
+              <div className="flex flex-wrap items-center gap-2 text-xs text-stone-500">
                 <User className="size-3 shrink-0" aria-hidden="true" />
                 <span>{log.user.name}</span>
                 <span className="text-stone-300">·</span>
                 <span className="truncate">{log.accessReason}</span>
+                <span className="text-stone-300 hidden sm:inline">·</span>
+                <time
+                  className="text-stone-400 sm:ml-auto"
+                  dateTime={new Date(log.createdAt).toISOString()}
+                >
+                  {formatDistanceToNow(new Date(log.createdAt), { addSuffix: true, locale: ko })}
+                </time>
               </div>
             </li>
           ))}

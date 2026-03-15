@@ -65,8 +65,8 @@ export function RecentChangesWidget({ initialChanges }: RecentChangesWidgetProps
                   href={`/customers/${change.customerId}`}
                   className="group flex flex-col gap-1 hover:opacity-80"
                 >
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
+                  <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <Badge className={`text-xs ${EVENT_TYPE_COLORS[change.eventType]}`}>
                         {EVENT_TYPE_LABELS[change.eventType]}
                       </Badge>

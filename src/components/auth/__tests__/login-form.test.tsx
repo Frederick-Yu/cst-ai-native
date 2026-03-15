@@ -44,6 +44,8 @@ jest.mock("@/components/ui/card", () => ({
 }));
 jest.mock("lucide-react", () => ({
   ShieldAlert: () => <svg aria-hidden="true" />,
+  CheckCircle2: () => <svg aria-hidden="true" />,
+  Loader2: () => <svg aria-hidden="true" />,
 }));
 
 import { signIn } from "next-auth/react";

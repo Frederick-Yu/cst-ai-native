@@ -1,5 +1,3 @@
-export const dynamic = "force-dynamic";
-
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { AuthenticatedLayout } from "@/components/layout/authenticated-layout";

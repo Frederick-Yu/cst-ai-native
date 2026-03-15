@@ -8,7 +8,7 @@ export default withAuth(
 
     // /admin/* 경로는 ADMIN 역할만 접근 가능
     if (pathname.startsWith("/admin") && token?.role !== "ADMIN") {
-      return NextResponse.redirect(new URL("/dashboard", req.url));
+      return NextResponse.redirect(new URL("/", req.url));
     }
 
     return NextResponse.next();
@@ -21,5 +21,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ["/customers/:path*", "/admin/:path*", "/dashboard/:path*"],
+  matcher: ["/", "/customers/:path*", "/admin/:path*", "/dashboard/:path*"],
 };

@@ -174,6 +174,9 @@ export async function createSystemInfo(formData: FormData) {
     revalidatePath(`/customers/${parsed.data.customerId}`);
     return { success: true };
   } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2003") {
+      return { success: false, error: m.systemInfo.customerNotFound };
+    }
     console.error("[createSystemInfo]", getErrorMessage(error));
     return { success: false, error: m.common.saveFailed };
   }

@@ -148,6 +148,9 @@ export async function createStakeholder(formData: FormData) {
     revalidatePath(`/customers/${parsed.data.customerId}`);
     return { success: true };
   } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2003") {
+      return { success: false, error: m.stakeholder.customerNotFound };
+    }
     console.error("[createStakeholder]", getErrorMessage(error));
     return { success: false, error: m.common.saveFailed };
   }

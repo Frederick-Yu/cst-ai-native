@@ -4,6 +4,7 @@ import { z } from "zod";
 import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { getErrorMessage } from "@/lib/utils";
 import { messages as m } from "@/messages";
 import { type FieldErrors } from "@/lib/form";
 
@@ -52,7 +53,8 @@ export async function signUp(formData: FormData) {
         },
       });
     });
-  } catch {
+  } catch (error) {
+    console.error("[signUp]", getErrorMessage(error));
     return { success: false, error: m.auth.signUpFailed };
   }
 

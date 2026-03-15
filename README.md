@@ -245,6 +245,55 @@ User     ──< AuditLog      (감사 로그, access_reason 필수)
 
 ---
 
+## 브랜치 보호 전략 (Branch Protection)
+
+`main` 브랜치에 GitHub Branch Protection Rules이 적용되어 있으며, 모든 코드는 반드시 Pull Request를 통해서만 병합할 수 있습니다.
+
+### 적용된 보호 규칙
+
+| 규칙 | 설정 | 설명 |
+|------|------|------|
+| `required_status_checks` | ✅ 필수 (strict) | CI 3개 job 전부 통과해야 merge 가능 |
+| 필수 CI job | `Lint`, `Type Check`, `Test` | 하나라도 실패 시 merge 버튼 비활성화 |
+| `enforce_admins` | ✅ 적용 | 관리자도 동일한 규칙 적용 |
+| `allow_force_pushes` | ❌ 차단 | main 강제 push 불가 |
+| `allow_deletions` | ❌ 차단 | main 브랜치 삭제 불가 |
+| `required_pull_request_reviews` | 없음 (1인 프로젝트) | 리뷰어 없이 PR 병합 가능 |
+
+### PR 개발 워크플로우
+
+```
+feature/[기능명] 브랜치 생성
+         ↓
+코드 작성 및 로컬 테스트
+         ↓
+git push origin feature/[기능명]
+         ↓
+GitHub에서 Pull Request 생성
+         ↓
+GitHub Actions CI 자동 실행
+  ├── Lint (ESLint)
+  ├── Type Check (tsc --noEmit)
+  └── Test (Jest — 107개 케이스)
+         ↓
+✅ 모든 CI 통과 → main에 Squash Merge
+         ↓
+Vercel 자동 프로덕션 배포
+```
+
+### 브랜치 네이밍 규칙
+
+| 용도 | 패턴 | 예시 |
+|------|------|------|
+| 새 기능 | `feat/[기능명]` | `feat/mobile-responsive` |
+| 버그 수정 | `fix/[버그명]` | `fix/audit-log-transaction` |
+| 문서 작업 | `docs/[문서명]` | `docs/branch-protection` |
+| 리팩토링 | `refactor/[대상]` | `refactor/form-state` |
+
+> **로컬 검증:** `pnpm lint && pnpm type-check && pnpm test` 를 PR 전 반드시 실행하여 CI 실패를 사전에 방지합니다.
+
+---
+
 ## 문서
 
 | 문서 | 설명 |

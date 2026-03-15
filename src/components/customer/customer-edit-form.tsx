@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 import { updateCustomer } from "@/actions/customer.actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -139,7 +140,9 @@ export function CustomerEditForm({ customer }: CustomerEditFormProps) {
           disabled={isPending}
           className="flex-1 bg-teal-600 text-white hover:bg-teal-500"
         >
-          {isPending ? "저장 중..." : "저장"}
+          {isPending ? (
+            <><Loader2 className="mr-2 size-4 animate-spin" aria-hidden="true" />저장 중...</>
+          ) : "저장"}
         </Button>
       </div>
     </form>

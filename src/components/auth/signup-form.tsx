@@ -2,7 +2,7 @@
 
 import { useActionState } from "react";
 import Link from "next/link";
-import { ShieldAlert } from "lucide-react";
+import { ShieldAlert, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -122,7 +122,9 @@ export function SignUpForm() {
           className="w-full bg-teal-600 text-white hover:bg-teal-500"
           size="lg"
         >
-          {isPending ? "가입 중..." : "회원가입"}
+          {isPending ? (
+            <><Loader2 className="mr-2 size-4 animate-spin" aria-hidden="true" />가입 중...</>
+          ) : "회원가입"}
         </Button>
         <p className="text-sm text-stone-400">
           이미 계정이 있으신가요?{" "}

@@ -2,7 +2,7 @@
 
 import { useState, useActionState } from "react";
 import { useRouter } from "next/navigation";
-import { ServerCog } from "lucide-react";
+import { ServerCog, Loader2 } from "lucide-react";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle,
   DialogDescription, DialogFooter, DialogTrigger,
@@ -156,7 +156,9 @@ export function AddSystemInfoDialog({ customerId }: { customerId: string }) {
               disabled={isPending}
               className="bg-teal-600 text-white hover:bg-teal-500"
             >
-              {isPending ? "저장 중..." : "저장"}
+              {isPending ? (
+                <><Loader2 className="mr-2 size-4 animate-spin" aria-hidden="true" />저장 중...</>
+              ) : "저장"}
             </Button>
           </DialogFooter>
         </form>

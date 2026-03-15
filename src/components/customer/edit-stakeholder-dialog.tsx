@@ -2,7 +2,7 @@
 
 import { useState, useActionState } from "react";
 import { useRouter } from "next/navigation";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Loader2 } from "lucide-react";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle,
   DialogDescription, DialogFooter, DialogTrigger,
@@ -162,7 +162,9 @@ export function EditStakeholderDialog({ stakeholder }: { stakeholder: Stakeholde
                   disabled={isEditPending}
                   className="bg-teal-600 text-white hover:bg-teal-500"
                 >
-                  {isEditPending ? "저장 중..." : "저장"}
+                  {isEditPending ? (
+                    <><Loader2 className="mr-2 size-4 animate-spin" aria-hidden="true" />저장 중...</>
+                  ) : "저장"}
                 </Button>
               </DialogFooter>
             </form>
@@ -214,7 +216,9 @@ export function EditStakeholderDialog({ stakeholder }: { stakeholder: Stakeholde
                   disabled={isDeletePending}
                   className="bg-rose-600 text-white hover:bg-rose-500"
                 >
-                  {isDeletePending ? "삭제 중..." : "삭제 확인"}
+                  {isDeletePending ? (
+                    <><Loader2 className="mr-2 size-4 animate-spin" aria-hidden="true" />삭제 중...</>
+                  ) : "삭제 확인"}
                 </Button>
               </DialogFooter>
             </form>

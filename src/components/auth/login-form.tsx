@@ -15,7 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ShieldAlert, CheckCircle2 } from "lucide-react";
+import { ShieldAlert, CheckCircle2, Loader2 } from "lucide-react";
 
 export function LoginForm() {
   const router = useRouter();
@@ -41,12 +41,15 @@ export function LoginForm() {
 
       if (result?.error) {
         setError("이메일 또는 비밀번호가 올바르지 않습니다.");
+        setIsLoading(false);
         return;
       }
 
       router.push("/");
       router.refresh();
-    } finally {
+      // 리다이렉트 완료까지 로딩 유지 (finally에서 해제하지 않음)
+    } catch {
+      setError("로그인 중 오류가 발생했습니다.");
       setIsLoading(false);
     }
   }
@@ -118,7 +121,9 @@ export function LoginForm() {
           className="w-full bg-teal-600 text-white hover:bg-teal-500"
           size="lg"
         >
-          {isLoading ? "로그인 중..." : "로그인"}
+          {isLoading ? (
+            <><Loader2 className="mr-2 size-4 animate-spin" aria-hidden="true" />로그인 중...</>
+          ) : "로그인"}
         </Button>
         <p className="text-sm text-stone-400">
           계정이 없으신가요?{" "}

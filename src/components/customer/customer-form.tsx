@@ -7,6 +7,7 @@ import { createCustomer } from "@/actions/customer.actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Loader2 } from "lucide-react";
 import { IndustryType, ContractStatus } from "@prisma/client";
 import { type FieldErrors, getFieldError, getStringError } from "@/lib/form";
 
@@ -149,7 +150,9 @@ export function CustomerForm() {
           disabled={isPending}
           className="flex-1 bg-teal-600 text-white hover:bg-teal-500"
         >
-          {isPending ? "등록 중..." : "고객사 등록"}
+          {isPending ? (
+            <><Loader2 className="mr-2 size-4 animate-spin" aria-hidden="true" />등록 중...</>
+          ) : "고객사 등록"}
         </Button>
       </div>
     </form>

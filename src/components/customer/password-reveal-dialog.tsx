@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { ShieldAlert, Eye, EyeOff, Copy, Check } from "lucide-react";
+import { ShieldAlert, Eye, EyeOff, Copy, Check, Loader2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -116,7 +116,9 @@ export function PasswordRevealDialog({ systemInfoId, systemInfoName }: PasswordR
                 disabled={isPending || accessReason.length < 5}
                 className="bg-rose-600 text-white hover:bg-rose-700"
               >
-                {isPending ? "조회 중..." : "조회"}
+                {isPending ? (
+                  <><Loader2 className="mr-2 size-4 animate-spin" aria-hidden="true" />조회 중...</>
+                ) : "조회"}
               </Button>
             </DialogFooter>
           </div>

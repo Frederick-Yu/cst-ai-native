@@ -4,6 +4,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { getErrorMessage } from "@/lib/utils";
 
 const RevealPasswordSchema = z.object({
   systemInfoId: z.string().min(1, "시스템 정보 ID가 필요합니다"),
@@ -55,7 +56,7 @@ export async function revealPassword(
     if (!result.hasPassword) return { success: false, error: "저장된 비밀번호가 없습니다" };
     return { success: true, passwordHash: result.passwordHash };
   } catch (error) {
-    console.error("[revealPassword]", error);
+    console.error("[revealPassword]", getErrorMessage(error));
     return { success: false, error: "조회 중 오류가 발생했습니다" };
   }
 }

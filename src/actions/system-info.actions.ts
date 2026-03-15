@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { AssetType, ServiceEnv, Prisma } from "@prisma/client";
+import { getErrorMessage } from "@/lib/utils";
 
 const UpdateSystemInfoSchema = z.object({
   systemInfoId: z.string().min(1),
@@ -69,7 +70,7 @@ export async function updateSystemInfo(formData: FormData) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
       return { success: false, error: "수정하려는 시스템 정보를 찾을 수 없습니다" };
     }
-    console.error("[updateSystemInfo]", error);
+    console.error("[updateSystemInfo]", getErrorMessage(error));
     return { success: false, error: "저장 중 오류가 발생했습니다" };
   }
 }
@@ -128,7 +129,7 @@ export async function createSystemInfo(formData: FormData) {
     revalidatePath(`/customers/${parsed.data.customerId}`);
     return { success: true };
   } catch (error) {
-    console.error("[createSystemInfo]", error);
+    console.error("[createSystemInfo]", getErrorMessage(error));
     return { success: false, error: "저장 중 오류가 발생했습니다" };
   }
 }

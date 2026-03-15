@@ -91,6 +91,59 @@ describe("createSystemInfo Server Action", () => {
     expect(result?.error).toHaveProperty("port");
   });
 
+  it("포트 번호 최댓값 65535는 유효하다", async () => {
+    (getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: "user-1" },
+    });
+
+    const formData = new FormData();
+    formData.set("customerId", "cust-1");
+    formData.set("name", "운영 서버");
+    formData.set("assetType", "SERVER");
+    formData.set("serviceEnv", "PRODUCTION");
+    formData.set("port", "65535");
+
+    const result = await createSystemInfo(formData);
+
+    expect(result?.success).toBe(true);
+  });
+
+  it("포트 번호 65536은 최댓값 초과로 검증 에러를 반환한다", async () => {
+    (getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: "user-1" },
+    });
+
+    const formData = new FormData();
+    formData.set("customerId", "cust-1");
+    formData.set("name", "운영 서버");
+    formData.set("assetType", "SERVER");
+    formData.set("serviceEnv", "PRODUCTION");
+    formData.set("port", "65536");
+
+    const result = await createSystemInfo(formData);
+
+    expect(result?.success).toBe(false);
+    expect(result?.error).toHaveProperty("port");
+  });
+
+  it("포트 번호 0은 최솟값 미만으로 검증 에러를 반환한다", async () => {
+    (getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: "user-1" },
+    });
+
+    const formData = new FormData();
+    formData.set("customerId", "cust-1");
+    formData.set("name", "운영 서버");
+    formData.set("assetType", "SERVER");
+    formData.set("serviceEnv", "PRODUCTION");
+    formData.set("port", "0");
+
+    const result = await createSystemInfo(formData);
+
+    expect(result?.success).toBe(false);
+    expect(result?.error).toHaveProperty("port");
+  });
+
   it("유효한 데이터로 시스템 정보를 생성한다", async () => {
     (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: "user-1" },
@@ -187,7 +240,7 @@ describe("updateSystemInfo Server Action", () => {
     expect(transactionCall).toBeDefined();
   });
 
-  it("유효한 데이터로 시스템 정보를 수정하고 트랜잭션이 실행된다", async () => {
+  it("유효한 데이터로 시스템 정보를 수정하고 AuditLog가 트랜잭션에 포함된다", async () => {
     (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: "user-1" },
     });
@@ -208,5 +261,13 @@ describe("updateSystemInfo Server Action", () => {
 
     expect(result?.success).toBe(true);
     expect(prisma.$transaction).toHaveBeenCalledTimes(1);
+    expect(prisma.auditLog.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          actionType: "UPDATE",
+          userId: "user-1",
+        }),
+      })
+    );
   });
 });

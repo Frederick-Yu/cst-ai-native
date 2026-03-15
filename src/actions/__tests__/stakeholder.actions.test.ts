@@ -34,6 +34,7 @@ jest.mock("@/lib/prisma", () => ({
 
 import { createStakeholder, updateStakeholder } from "@/actions/stakeholder.actions";
 import { getServerSession } from "next-auth";
+import { prisma } from "@/lib/prisma";
 
 describe("createStakeholder Server Action", () => {
   beforeEach(() => {
@@ -167,7 +168,7 @@ describe("updateStakeholder Server Action", () => {
     expect(result?.error).toHaveProperty("change_reason");
   });
 
-  it("유효한 데이터로 담당자를 수정하고 트랜잭션이 실행된다", async () => {
+  it("유효한 데이터로 담당자를 수정하고 AuditLog가 트랜잭션에 포함된다", async () => {
     (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: "user-1", role: "MEMBER" },
     });
@@ -180,12 +181,19 @@ describe("updateStakeholder Server Action", () => {
     formData.set("email", "hong@example.com");
     formData.set("change_reason", "담당자 역할 변경으로 인한 수정");
 
-    const { prisma } = await import("@/lib/prisma");
     (prisma.$transaction as jest.Mock).mockResolvedValue([]);
 
     const result = await updateStakeholder(formData);
 
     expect(result?.success).toBe(true);
     expect(prisma.$transaction).toHaveBeenCalledTimes(1);
+    expect(prisma.auditLog.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          actionType: "UPDATE",
+          userId: "user-1",
+        }),
+      })
+    );
   });
 });

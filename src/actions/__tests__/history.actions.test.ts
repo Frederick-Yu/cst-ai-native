@@ -85,7 +85,7 @@ describe("createHistory Server Action", () => {
     expect(result?.error).toHaveProperty("content");
   });
 
-  it("유효한 데이터로 이력을 생성하고 AuditLog가 함께 기록된다", async () => {
+  it("유효한 데이터로 이력을 생성하고 AuditLog가 트랜잭션에 포함된다", async () => {
     (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: "user-1" },
     });
@@ -102,6 +102,14 @@ describe("createHistory Server Action", () => {
 
     expect(result?.success).toBe(true);
     expect(prisma.$transaction).toHaveBeenCalledTimes(1);
+    expect(prisma.auditLog.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          actionType: "CREATE",
+          userId: "user-1",
+        }),
+      })
+    );
   });
 
   it("INCIDENT 이벤트 타입으로 이력을 생성할 수 있다", async () => {

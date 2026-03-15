@@ -10,6 +10,14 @@ const config: Config = {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
   testMatch: ["**/__tests__/**/*.[jt]s?(x)", "**/?(*.)+(spec|test).[jt]s?(x)"],
+  coverageDirectory: "coverage",
+  coverageThreshold: {
+    global: {
+      branches: 70,
+      functions: 80,
+      lines: 80,
+    },
+  },
 };
 
 export default createJestConfig(config);

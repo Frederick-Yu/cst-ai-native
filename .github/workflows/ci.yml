@@ -43,7 +43,7 @@ jobs:
       - name: Test
         run: pnpm test
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://localhost:5432/dummy' }}
 
       - name: Build
         run: pnpm build
@@ -51,5 +51,3 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://localhost:5432/dummy' }}
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET || 'ci-build-dummy-secret-placeholder-32ch' }}
           NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL || 'http://localhost:3000' }}
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'http://localhost:54321' }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'dummy' }}

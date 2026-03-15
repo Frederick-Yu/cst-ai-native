@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { createStakeholder } from "@/actions/stakeholder.actions";
 import { StakeholderRole } from "@prisma/client";
 import { toast } from "sonner";
+import { type FormState, getFieldError, getStringError } from "@/lib/form";
 
 const ROLE_OPTIONS: { value: StakeholderRole; label: string }[] = [
   { value: "CONTACT", label: "담당자" },
@@ -20,8 +21,6 @@ const ROLE_OPTIONS: { value: StakeholderRole; label: string }[] = [
   { value: "TECHNICAL", label: "기술담당" },
   { value: "EXECUTIVE", label: "임원" },
 ];
-
-type FormState = { success?: boolean; error?: string | Record<string, string[]> } | null;
 
 export function AddStakeholderDialog({ customerId }: { customerId: string }) {
   const [open, setOpen] = useState(false);
@@ -36,16 +35,10 @@ export function AddStakeholderDialog({ customerId }: { customerId: string }) {
         router.refresh();
         return { success: true };
       }
-      return result;
+      return result as FormState;
     },
     null
   );
-
-  function getFieldError(field: string) {
-    if (state?.error && typeof state.error === "object") {
-      return (state.error as Record<string, string[]>)[field]?.[0];
-    }
-  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -74,7 +67,7 @@ export function AddStakeholderDialog({ customerId }: { customerId: string }) {
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="sh-name" className="text-stone-700">이름 <span className="text-rose-500">*</span></Label>
             <Input id="sh-name" name="name" placeholder="홍길동" required />
-            {getFieldError("name") && <p className="text-xs text-rose-500">{getFieldError("name")}</p>}
+            {getFieldError(state, "name") && <p className="text-xs text-rose-500">{getFieldError(state, "name")}</p>}
           </div>
 
           <div className="flex flex-col gap-1.5">
@@ -94,7 +87,7 @@ export function AddStakeholderDialog({ customerId }: { customerId: string }) {
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="sh-email" className="text-stone-700">이메일 <span className="text-xs font-normal text-stone-400">(선택)</span></Label>
             <Input id="sh-email" name="email" type="email" placeholder="hong@example.com" />
-            {getFieldError("email") && <p className="text-xs text-rose-500">{getFieldError("email")}</p>}
+            {getFieldError(state, "email") && <p className="text-xs text-rose-500">{getFieldError(state, "email")}</p>}
           </div>
 
           <div className="flex flex-col gap-1.5">
@@ -102,8 +95,8 @@ export function AddStakeholderDialog({ customerId }: { customerId: string }) {
             <Input id="sh-phone" name="phone" placeholder="010-0000-0000" />
           </div>
 
-          {state?.error && typeof state.error === "string" && (
-            <p role="alert" className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-600">{state.error}</p>
+          {getStringError(state) && (
+            <p role="alert" className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-600">{getStringError(state)}</p>
           )}
 
           <DialogFooter>

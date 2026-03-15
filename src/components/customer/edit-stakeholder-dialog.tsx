@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { updateStakeholder, deleteStakeholder } from "@/actions/stakeholder.actions";
 import { StakeholderRole } from "@prisma/client";
 import { toast } from "sonner";
+import { type FormState, getFieldError, getStringError } from "@/lib/form";
 
 const ROLE_OPTIONS: { value: StakeholderRole; label: string }[] = [
   { value: "CONTACT", label: "담당자" },
@@ -30,8 +31,6 @@ interface StakeholderData {
   phone: string | null;
 }
 
-type FormState = { success?: boolean; error?: string | Record<string, string[]> } | null;
-
 export function EditStakeholderDialog({ stakeholder }: { stakeholder: StakeholderData }) {
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<"edit" | "delete">("edit");
@@ -46,7 +45,7 @@ export function EditStakeholderDialog({ stakeholder }: { stakeholder: Stakeholde
         router.refresh();
         return { success: true };
       }
-      return result;
+      return result as FormState;
     },
     null
   );
@@ -60,16 +59,10 @@ export function EditStakeholderDialog({ stakeholder }: { stakeholder: Stakeholde
         router.refresh();
         return { success: true };
       }
-      return result;
+      return result as FormState;
     },
     null
   );
-
-  function getFieldError(state: FormState, field: string) {
-    if (state?.error && typeof state.error === "object") {
-      return (state.error as Record<string, string[]>)[field]?.[0];
-    }
-  }
 
   function handleOpenChange(next: boolean) {
     setOpen(next);
@@ -149,8 +142,8 @@ export function EditStakeholderDialog({ stakeholder }: { stakeholder: Stakeholde
                 )}
               </div>
 
-              {editState?.error && typeof editState.error === "string" && (
-                <p role="alert" className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-600">{editState.error}</p>
+              {getStringError(editState) && (
+                <p role="alert" className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-600">{getStringError(editState)}</p>
               )}
 
               <DialogFooter className="gap-2">
@@ -204,8 +197,8 @@ export function EditStakeholderDialog({ stakeholder }: { stakeholder: Stakeholde
                 )}
               </div>
 
-              {deleteState?.error && typeof deleteState.error === "string" && (
-                <p role="alert" className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-600">{deleteState.error}</p>
+              {getStringError(deleteState) && (
+                <p role="alert" className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-600">{getStringError(deleteState)}</p>
               )}
 
               <DialogFooter className="gap-2">

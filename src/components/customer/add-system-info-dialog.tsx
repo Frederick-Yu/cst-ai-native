@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { createSystemInfo } from "@/actions/system-info.actions";
 import { AssetType, ServiceEnv } from "@prisma/client";
 import { toast } from "sonner";
+import { type FormState, getFieldError, getStringError } from "@/lib/form";
 
 const ASSET_TYPE_OPTIONS: { value: AssetType; label: string }[] = [
   { value: "SERVER", label: "서버" },
@@ -29,8 +30,6 @@ const SERVICE_ENV_OPTIONS: { value: ServiceEnv; label: string }[] = [
   { value: "DEVELOPMENT", label: "개발" },
 ];
 
-type FormState = { success?: boolean; error?: string | Record<string, string[]> } | null;
-
 export function AddSystemInfoDialog({ customerId }: { customerId: string }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -44,16 +43,10 @@ export function AddSystemInfoDialog({ customerId }: { customerId: string }) {
         router.refresh();
         return { success: true };
       }
-      return result;
+      return result as FormState;
     },
     null
   );
-
-  function getFieldError(field: string) {
-    if (state?.error && typeof state.error === "object") {
-      return (state.error as Record<string, string[]>)[field]?.[0];
-    }
-  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -83,7 +76,7 @@ export function AddSystemInfoDialog({ customerId }: { customerId: string }) {
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="si-name" className="text-stone-700">시스템명 <span className="text-rose-500">*</span></Label>
             <Input id="si-name" name="name" placeholder="예: 운영 DB 서버" required />
-            {getFieldError("name") && <p className="text-xs text-rose-500">{getFieldError("name")}</p>}
+            {getFieldError(state, "name") && <p className="text-xs text-rose-500">{getFieldError(state, "name")}</p>}
           </div>
 
           {/* 유형 / 환경 */}
@@ -125,7 +118,7 @@ export function AddSystemInfoDialog({ customerId }: { customerId: string }) {
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="si-port" className="text-stone-700">포트 <span className="text-xs font-normal text-stone-400">(선택)</span></Label>
               <Input id="si-port" name="port" type="number" placeholder="3306" min={1} max={65535} />
-              {getFieldError("port") && <p className="text-xs text-rose-500">{getFieldError("port")}</p>}
+              {getFieldError(state, "port") && <p className="text-xs text-rose-500">{getFieldError(state, "port")}</p>}
             </div>
           </div>
 
@@ -153,8 +146,8 @@ export function AddSystemInfoDialog({ customerId }: { customerId: string }) {
             />
           </div>
 
-          {state?.error && typeof state.error === "string" && (
-            <p role="alert" className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-600">{state.error}</p>
+          {getStringError(state) && (
+            <p role="alert" className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-600">{getStringError(state)}</p>
           )}
 
           <DialogFooter>

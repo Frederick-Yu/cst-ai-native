@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { IndustryType, ContractStatus } from "@prisma/client";
+import { type FieldErrors, getFieldError, getStringError } from "@/lib/form";
 
 const INDUSTRY_TYPE_OPTIONS: { value: IndustryType; label: string }[] = [
   { value: "FINANCE", label: "금융" },
@@ -25,18 +26,18 @@ const CONTRACT_STATUS_OPTIONS: { value: ContractStatus; label: string }[] = [
   { value: "TERMINATED", label: "종료" },
 ];
 
-type FormState = {
-  success?: boolean;
-  customerId?: string;
-  error?: string | Record<string, string[]>;
-} | null;
+// createCustomer는 성공 시 customerId를 반환하므로 로컬 확장 타입 사용
+type CustomerFormState =
+  | { success: true; customerId: string }
+  | { success: false; error: string | FieldErrors }
+  | null;
 
 export function CustomerForm() {
   const router = useRouter();
-  const [state, formAction, isPending] = useActionState<FormState, FormData>(
+  const [state, formAction, isPending] = useActionState<CustomerFormState, FormData>(
     async (_prev, formData) => {
       const result = await createCustomer(formData);
-      return result ?? null;
+      return (result ?? null) as CustomerFormState;
     },
     null
   );
@@ -48,14 +49,7 @@ export function CustomerForm() {
     }
   }, [state, router]);
 
-  function getFieldError(field: string): string | undefined {
-    if (state?.error && typeof state.error === "object") {
-      return (state.error as Record<string, string[]>)[field]?.[0];
-    }
-    return undefined;
-  }
-
-  const nameError = getFieldError("name");
+  const nameError = getFieldError(state, "name");
 
   return (
     <form action={formAction} className="flex flex-col gap-5">
@@ -133,9 +127,9 @@ export function CustomerForm() {
       </div>
 
       {/* 서버 에러 */}
-      {state?.error && typeof state.error === "string" && (
+      {getStringError(state) && (
         <p role="alert" className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-600">
-          {state.error}
+          {getStringError(state)}
         </p>
       )}
 

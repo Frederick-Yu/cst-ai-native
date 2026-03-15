@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { IndustryType, ContractStatus } from "@prisma/client";
+import { type FormState, getFieldError, getStringError } from "@/lib/form";
 
 const INDUSTRY_TYPE_OPTIONS: { value: IndustryType; label: string }[] = [
   { value: "FINANCE", label: "금융" },
@@ -34,23 +35,15 @@ interface CustomerEditFormProps {
   };
 }
 
-type FormState = { error?: string | Record<string, string[]> } | null;
-
 export function CustomerEditForm({ customer }: CustomerEditFormProps) {
   const router = useRouter();
   const [state, formAction, isPending] = useActionState<FormState, FormData>(
     async (_prev, formData) => {
       const result = await updateCustomer(formData);
-      return result ?? null;
+      return (result ?? null) as FormState;
     },
     null
   );
-
-  function getFieldError(field: string) {
-    if (state?.error && typeof state.error === "object") {
-      return (state.error as Record<string, string[]>)[field]?.[0];
-    }
-  }
 
   return (
     <form action={formAction} className="flex flex-col gap-5">
@@ -62,7 +55,7 @@ export function CustomerEditForm({ customer }: CustomerEditFormProps) {
           고객사명 <span className="text-rose-500">*</span>
         </Label>
         <Input id="name" name="name" defaultValue={customer.name} required />
-        {getFieldError("name") && <p className="text-xs text-rose-500">{getFieldError("name")}</p>}
+        {getFieldError(state, "name") && <p className="text-xs text-rose-500">{getFieldError(state, "name")}</p>}
       </div>
 
       {/* 업종 */}
@@ -120,14 +113,14 @@ export function CustomerEditForm({ customer }: CustomerEditFormProps) {
           placeholder="변경 사유를 5자 이상 입력하세요"
           required
         />
-        {getFieldError("change_reason") && (
-          <p className="text-xs text-rose-500">{getFieldError("change_reason")}</p>
+        {getFieldError(state, "change_reason") && (
+          <p className="text-xs text-rose-500">{getFieldError(state, "change_reason")}</p>
         )}
       </div>
 
-      {state?.error && typeof state.error === "string" && (
+      {getStringError(state) && (
         <p role="alert" className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-600">
-          {state.error}
+          {getStringError(state)}
         </p>
       )}
 

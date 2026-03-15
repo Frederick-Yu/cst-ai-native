@@ -8,6 +8,7 @@ import { authOptions } from "@/lib/auth";
 import { StakeholderRole, Prisma } from "@prisma/client";
 import { getErrorMessage } from "@/lib/utils";
 import { messages as m } from "@/messages";
+import { type FieldErrors } from "@/lib/form";
 
 const UpdateStakeholderSchema = z.object({
   stakeholderId: z.string().min(1),
@@ -25,7 +26,7 @@ export async function updateStakeholder(formData: FormData) {
 
   const parsed = UpdateStakeholderSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { success: false, error: parsed.error.flatten().fieldErrors };
+    return { success: false, error: parsed.error.flatten().fieldErrors as FieldErrors };
   }
 
   try {
@@ -82,7 +83,7 @@ export async function deleteStakeholder(formData: FormData) {
 
   const parsed = DeleteStakeholderSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { success: false, error: parsed.error.flatten().fieldErrors };
+    return { success: false, error: parsed.error.flatten().fieldErrors as FieldErrors };
   }
 
   try {
@@ -119,7 +120,7 @@ export async function createStakeholder(formData: FormData) {
   const raw = Object.fromEntries(formData);
   const parsed = CreateStakeholderSchema.safeParse(raw);
   if (!parsed.success) {
-    return { success: false, error: parsed.error.flatten().fieldErrors };
+    return { success: false, error: parsed.error.flatten().fieldErrors as FieldErrors };
   }
 
   try {

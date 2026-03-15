@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { messages as m } from "@/messages";
+import { type FieldErrors } from "@/lib/form";
 
 const SignUpSchema = z
   .object({
@@ -21,7 +22,7 @@ const SignUpSchema = z
 export async function signUp(formData: FormData) {
   const parsed = SignUpSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { success: false, error: parsed.error.flatten().fieldErrors };
+    return { success: false, error: parsed.error.flatten().fieldErrors as FieldErrors };
   }
 
   try {

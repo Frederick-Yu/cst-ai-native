@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { createHistory } from "@/actions/history.actions";
 import { EventType } from "@prisma/client";
 import { toast } from "sonner";
+import { type FormState, getFieldError, getStringError } from "@/lib/form";
 
 const EVENT_TYPE_OPTIONS: { value: EventType; label: string }[] = [
   { value: "INSTALLATION", label: "구축" },
@@ -22,8 +23,6 @@ const EVENT_TYPE_OPTIONS: { value: EventType; label: string }[] = [
   { value: "MEETING", label: "미팅" },
   { value: "OTHER", label: "기타" },
 ];
-
-type FormState = { success?: boolean; error?: string | Record<string, string[]> } | null;
 
 export function AddHistoryDialog({ customerId }: { customerId: string }) {
   const [open, setOpen] = useState(false);
@@ -38,16 +37,10 @@ export function AddHistoryDialog({ customerId }: { customerId: string }) {
         router.refresh();
         return { success: true };
       }
-      return result;
+      return result as FormState;
     },
     null
   );
-
-  function getFieldError(field: string) {
-    if (state?.error && typeof state.error === "object") {
-      return (state.error as Record<string, string[]>)[field]?.[0];
-    }
-  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -92,7 +85,7 @@ export function AddHistoryDialog({ customerId }: { customerId: string }) {
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="hi-title" className="text-stone-700">제목 <span className="text-rose-500">*</span></Label>
             <Input id="hi-title" name="title" placeholder="예: 정기 서버 점검" required />
-            {getFieldError("title") && <p className="text-xs text-rose-500">{getFieldError("title")}</p>}
+            {getFieldError(state, "title") && <p className="text-xs text-rose-500">{getFieldError(state, "title")}</p>}
           </div>
 
           {/* 내용 */}
@@ -106,11 +99,11 @@ export function AddHistoryDialog({ customerId }: { customerId: string }) {
               placeholder="작업 내용을 상세히 입력하세요"
               className="w-full resize-none rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-800 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
-            {getFieldError("content") && <p className="text-xs text-rose-500">{getFieldError("content")}</p>}
+            {getFieldError(state, "content") && <p className="text-xs text-rose-500">{getFieldError(state, "content")}</p>}
           </div>
 
-          {state?.error && typeof state.error === "string" && (
-            <p role="alert" className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-600">{state.error}</p>
+          {getStringError(state) && (
+            <p role="alert" className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-600">{getStringError(state)}</p>
           )}
 
           <DialogFooter>

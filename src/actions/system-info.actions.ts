@@ -8,6 +8,7 @@ import { authOptions } from "@/lib/auth";
 import { AssetType, ServiceEnv, Prisma } from "@prisma/client";
 import { getErrorMessage } from "@/lib/utils";
 import { messages as m } from "@/messages";
+import { type FieldErrors } from "@/lib/form";
 
 const UpdateSystemInfoSchema = z.object({
   systemInfoId: z.string().min(1),
@@ -33,7 +34,7 @@ export async function updateSystemInfo(formData: FormData) {
   const raw = Object.fromEntries(formData);
   const parsed = UpdateSystemInfoSchema.safeParse(raw);
   if (!parsed.success) {
-    return { success: false, error: parsed.error.flatten().fieldErrors };
+    return { success: false, error: parsed.error.flatten().fieldErrors as FieldErrors };
   }
 
   // 비밀번호가 비어 있으면 기존 값 유지
@@ -104,7 +105,7 @@ export async function deleteSystemInfo(formData: FormData) {
 
   const parsed = DeleteSystemInfoSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { success: false, error: parsed.error.flatten().fieldErrors };
+    return { success: false, error: parsed.error.flatten().fieldErrors as FieldErrors };
   }
 
   try {
@@ -141,7 +142,7 @@ export async function createSystemInfo(formData: FormData) {
   const raw = Object.fromEntries(formData);
   const parsed = CreateSystemInfoSchema.safeParse(raw);
   if (!parsed.success) {
-    return { success: false, error: parsed.error.flatten().fieldErrors };
+    return { success: false, error: parsed.error.flatten().fieldErrors as FieldErrors };
   }
 
   try {

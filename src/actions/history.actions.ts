@@ -8,6 +8,7 @@ import { authOptions } from "@/lib/auth";
 import { EventType, Prisma } from "@prisma/client";
 import { getErrorMessage } from "@/lib/utils";
 import { messages as m } from "@/messages";
+import { type FieldErrors } from "@/lib/form";
 
 const CreateHistorySchema = z.object({
   customerId: z.string().min(1),
@@ -23,7 +24,7 @@ export async function createHistory(formData: FormData) {
   const raw = Object.fromEntries(formData);
   const parsed = CreateHistorySchema.safeParse(raw);
   if (!parsed.success) {
-    return { success: false, error: parsed.error.flatten().fieldErrors };
+    return { success: false, error: parsed.error.flatten().fieldErrors as FieldErrors };
   }
 
   try {

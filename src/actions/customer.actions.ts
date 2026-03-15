@@ -9,6 +9,7 @@ import { authOptions } from "@/lib/auth";
 import { IndustryType, ContractStatus, Prisma } from "@prisma/client";
 import { getErrorMessage } from "@/lib/utils";
 import { messages as m } from "@/messages";
+import { type FieldErrors } from "@/lib/form";
 
 const UpdateCustomerSchema = z.object({
   customerId: z.string().min(1),
@@ -25,7 +26,7 @@ export async function updateCustomer(formData: FormData) {
 
   const parsed = UpdateCustomerSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { success: false, error: parsed.error.flatten().fieldErrors };
+    return { success: false, error: parsed.error.flatten().fieldErrors as FieldErrors };
   }
 
   try {
@@ -75,7 +76,7 @@ export async function createCustomer(formData: FormData) {
 
   const parsed = CreateCustomerSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { success: false, error: parsed.error.flatten().fieldErrors };
+    return { success: false, error: parsed.error.flatten().fieldErrors as FieldErrors };
   }
 
   let customerId: string;

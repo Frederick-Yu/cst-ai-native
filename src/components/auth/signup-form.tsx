@@ -11,23 +11,16 @@ import {
   CardFooter, CardHeader, CardTitle,
 } from "@/components/ui/card";
 import { signUp } from "@/actions/auth.actions";
-
-type FormState = { success?: boolean; error?: string | Record<string, string[]> } | null;
+import { type FormState, getFieldError, getStringError } from "@/lib/form";
 
 export function SignUpForm() {
   const [state, formAction, isPending] = useActionState<FormState, FormData>(
     async (_prev, formData) => {
       const result = await signUp(formData);
-      return result ?? null;
+      return (result ?? null) as FormState;
     },
     null
   );
-
-  function getFieldError(field: string) {
-    if (state?.error && typeof state.error === "object") {
-      return (state.error as Record<string, string[]>)[field]?.[0];
-    }
-  }
 
   return (
     <Card className="w-full max-w-sm bg-stone-900 ring-stone-700">
@@ -54,8 +47,8 @@ export function SignUpForm() {
               aria-required="true"
               className="border-stone-700 bg-stone-800 text-stone-100 placeholder:text-stone-500"
             />
-            {getFieldError("name") && (
-              <p className="text-xs text-rose-400">{getFieldError("name")}</p>
+            {getFieldError(state, "name") && (
+              <p className="text-xs text-rose-400">{getFieldError(state, "name")}</p>
             )}
           </div>
 
@@ -72,8 +65,8 @@ export function SignUpForm() {
               aria-required="true"
               className="border-stone-700 bg-stone-800 text-stone-100 placeholder:text-stone-500"
             />
-            {getFieldError("email") && (
-              <p className="text-xs text-rose-400">{getFieldError("email")}</p>
+            {getFieldError(state, "email") && (
+              <p className="text-xs text-rose-400">{getFieldError(state, "email")}</p>
             )}
           </div>
 
@@ -90,8 +83,8 @@ export function SignUpForm() {
               aria-required="true"
               className="border-stone-700 bg-stone-800 text-stone-100 placeholder:text-stone-500"
             />
-            {getFieldError("password") && (
-              <p className="text-xs text-rose-400">{getFieldError("password")}</p>
+            {getFieldError(state, "password") && (
+              <p className="text-xs text-rose-400">{getFieldError(state, "password")}</p>
             )}
           </div>
 
@@ -108,14 +101,14 @@ export function SignUpForm() {
               aria-required="true"
               className="border-stone-700 bg-stone-800 text-stone-100 placeholder:text-stone-500"
             />
-            {getFieldError("confirmPassword") && (
-              <p className="text-xs text-rose-400">{getFieldError("confirmPassword")}</p>
+            {getFieldError(state, "confirmPassword") && (
+              <p className="text-xs text-rose-400">{getFieldError(state, "confirmPassword")}</p>
             )}
           </div>
 
-          {state?.error && typeof state.error === "string" && (
+          {getStringError(state) && (
             <p role="alert" className="rounded-md bg-rose-900/40 px-3 py-2 text-sm text-rose-300">
-              {state.error}
+              {getStringError(state)}
             </p>
           )}
         </form>

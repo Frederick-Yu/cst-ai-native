@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getErrorMessage } from "@/lib/utils";
 import { messages as m } from "@/messages";
+import { type FieldErrors } from "@/lib/form";
 
 const RevealPasswordSchema = z.object({
   systemInfoId: z.string().min(1, m.systemInfo.idRequired),
@@ -27,7 +28,7 @@ export async function revealPassword(
 
   const parsed = RevealPasswordSchema.safeParse({ systemInfoId, accessReason });
   if (!parsed.success) {
-    return { success: false, error: parsed.error.flatten().fieldErrors as Record<string, string[]> };
+    return { success: false, error: parsed.error.flatten().fieldErrors as FieldErrors };
   }
 
   try {

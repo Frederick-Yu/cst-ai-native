@@ -84,7 +84,7 @@ export function EditStakeholderDialog({ stakeholder }: { stakeholder: Stakeholde
         <Pencil className="size-3" aria-hidden="true" />
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className="sm:max-w-md">
         {mode === "edit" ? (
           <>
             <DialogHeader>

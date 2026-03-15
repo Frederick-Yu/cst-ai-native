@@ -9,6 +9,8 @@
     "lint": "eslint",
     "test": "jest",
     "test:watch": "jest --watch",
+    "test:e2e": "playwright test",
+    "test:e2e:report": "playwright show-report",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
@@ -36,6 +38,7 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",

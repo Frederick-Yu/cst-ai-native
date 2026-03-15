@@ -55,7 +55,7 @@ export function AddStakeholderDialog({ customerId }: { customerId: string }) {
         추가
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-stone-800">담당자 추가</DialogTitle>
           <DialogDescription>새로운 담당자 정보를 입력하세요.</DialogDescription>

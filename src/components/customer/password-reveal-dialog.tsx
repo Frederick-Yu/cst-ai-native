@@ -79,7 +79,7 @@ export function PasswordRevealDialog({ systemInfoId, systemInfoName }: PasswordR
         비밀번호 보기
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-stone-800">
             <ShieldAlert className="size-4 text-rose-500" aria-hidden="true" />

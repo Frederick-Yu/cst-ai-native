@@ -40,3 +40,7 @@ prisma/generated/
 .vercel
 
 /src/generated/prisma
+
+# Playwright
+playwright-report/
+test-results/

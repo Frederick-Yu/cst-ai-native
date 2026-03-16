@@ -1,6 +1,6 @@
-import { AuthenticatedLayout } from "@/components/layout/authenticated-layout";
-import { CustomerForm } from "@/components/customer/customer-form";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AuthenticatedLayout } from "@/shared/components/layout/authenticated-layout";
+import { CustomerForm } from "@/domains/customer/components/customer-form";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Building2 } from "lucide-react";
 
 export default function NewCustomerPage() {

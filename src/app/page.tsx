@@ -1,9 +1,9 @@
 export const dynamic = "force-dynamic";
 
-import { prisma } from "@/lib/prisma";
-import { AuthenticatedLayout } from "@/components/layout/authenticated-layout";
-import { DashboardStats } from "@/components/dashboard/dashboard-stats";
-import { RecentChangesWidget } from "@/components/dashboard/recent-changes-widget";
+import { prisma } from "@/shared/lib/prisma";
+import { AuthenticatedLayout } from "@/shared/components/layout/authenticated-layout";
+import { DashboardStats } from "@/shared/components/dashboard/dashboard-stats";
+import { RecentChangesWidget } from "@/shared/components/dashboard/recent-changes-widget";
 
 export default async function DashboardPage() {
   const sevenDaysAgo = new Date();

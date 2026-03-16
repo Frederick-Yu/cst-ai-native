@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
-import { prisma } from "@/lib/prisma";
-import { AuthenticatedLayout } from "@/components/layout/authenticated-layout";
-import { CustomerEditForm } from "@/components/customer/customer-edit-form";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { prisma } from "@/shared/lib/prisma";
+import { AuthenticatedLayout } from "@/shared/components/layout/authenticated-layout";
+import { CustomerEditForm } from "@/domains/customer/components/customer-edit-form";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Pencil } from "lucide-react";
 
 interface EditPageProps {

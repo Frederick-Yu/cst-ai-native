@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
-import { AuthenticatedLayout } from "@/components/layout/authenticated-layout";
-import { CustomerCard } from "@/components/customer/customer-card";
-import { CustomerSearchBar } from "@/components/customer/customer-search-bar";
+import { prisma } from "@/shared/lib/prisma";
+import { AuthenticatedLayout } from "@/shared/components/layout/authenticated-layout";
+import { CustomerCard } from "@/domains/customer/components/customer-card";
+import { CustomerSearchBar } from "@/domains/customer/components/customer-search-bar";
 import { ContractStatus } from "@prisma/client";
 import { Plus } from "lucide-react";
 

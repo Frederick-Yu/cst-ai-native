@@ -1,9 +1,9 @@
 export const dynamic = "force-dynamic";
 
-import { prisma } from "@/lib/prisma";
-import { AuthenticatedLayout } from "@/components/layout/authenticated-layout";
-import { AuditLogFilter } from "@/components/audit-log/audit-log-filter";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { prisma } from "@/shared/lib/prisma";
+import { AuthenticatedLayout } from "@/shared/components/layout/authenticated-layout";
+import { AuditLogFilter } from "@/domains/audit/components/audit-log-filter";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { ScrollText } from "lucide-react";
 
 export default async function AuditLogsPage() {

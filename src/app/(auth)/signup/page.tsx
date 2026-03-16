@@ -1,4 +1,4 @@
-import { SignUpForm } from "@/components/auth/signup-form";
+import { SignUpForm } from "@/domains/auth/components/signup-form";
 
 export const metadata = {
   title: "회원가입 | Customer Status Tracker",

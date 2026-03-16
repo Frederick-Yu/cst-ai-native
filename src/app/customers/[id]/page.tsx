@@ -1,16 +1,16 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { prisma } from "@/lib/prisma";
-import { AuthenticatedLayout } from "@/components/layout/authenticated-layout";
-import { CustomerTimeline } from "@/components/customer/customer-timeline";
-import { SystemInfoCard } from "@/components/customer/system-info-card";
-import { StakeholderList } from "@/components/customer/stakeholder-list";
-import { AddStakeholderDialog } from "@/components/customer/add-stakeholder-dialog";
-import { AddSystemInfoDialog } from "@/components/customer/add-system-info-dialog";
-import { AddHistoryDialog } from "@/components/customer/add-history-dialog";
-import { ChangeHistoryTabs } from "@/components/customer/change-history-tabs";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { prisma } from "@/shared/lib/prisma";
+import { AuthenticatedLayout } from "@/shared/components/layout/authenticated-layout";
+import { CustomerTimeline } from "@/domains/customer/components/customer-timeline";
+import { SystemInfoCard } from "@/domains/customer/components/system-info-card";
+import { StakeholderList } from "@/domains/customer/components/stakeholder-list";
+import { AddStakeholderDialog } from "@/domains/customer/components/add-stakeholder-dialog";
+import { AddSystemInfoDialog } from "@/domains/customer/components/add-system-info-dialog";
+import { AddHistoryDialog } from "@/domains/customer/components/add-history-dialog";
+import { ChangeHistoryTabs } from "@/domains/customer/components/change-history-tabs";
+import { Badge } from "@/shared/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { ContractStatus } from "@prisma/client";
 import { Pencil } from "lucide-react";
 

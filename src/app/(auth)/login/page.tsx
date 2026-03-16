@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { LoginForm } from "@/components/auth/login-form";
+import { LoginForm } from "@/domains/auth/components/login-form";
 
 export const metadata = {
   title: "로그인 | Customer Status Tracker",

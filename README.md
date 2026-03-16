@@ -211,16 +211,16 @@ User     ──< AuditLog      (감사 로그, access_reason 필수)
 
 ## 테스트 현황
 
-`pnpm test` 실행 시 **14개 테스트 스위트 / 107개 케이스** 전부 통과.
+`pnpm test` 실행 시 **14개 테스트 스위트 / 128개 케이스** 전부 통과.
 
 | 테스트 파일 | 케이스 | 검증 대상 |
 |-------------|:------:|-----------|
 | `audit.actions.test.ts` | 6 | `revealPassword` + AuditLog 트랜잭션 인자 검증 |
-| `customer.actions.test.ts` | 7 | 고객사 생성·수정 + `change_reason` Zod 강제 |
+| `customer.actions.test.ts` | 17 | 고객사 생성·수정·삭제 + Zod 강제 + P2025/P2002 에러 분기 |
 | `auth.actions.test.ts` | 6 | 회원가입 + bcrypt 해싱 |
 | `stakeholder.actions.test.ts` | 8 | 담당자 CRUD + AuditLog 트랜잭션 인자 검증 |
 | `system-info.actions.test.ts` | 11 | 시스템 정보 CRUD + 포트 경계값 + AuditLog 검증 |
-| `history.actions.test.ts` | 5 | 이력 생성 + AuditLog 트랜잭션 인자 검증 |
+| `history.actions.test.ts` | 17 | 이력 생성·**수정·삭제** + Zod 강제 + P2025 에러 분기 |
 | `zod-schemas.test.ts` | 8 | `change_reason` / `access_reason` 5자 이상 검증 |
 | `password-reveal-dialog.test.tsx` | 11 | ARIA + 조회 플로우 + 상태 초기화 + 클립보드 |
 | `customer-form.test.tsx` | 9 | 폼 필드 렌더링 + 에러 메시지 |
@@ -230,7 +230,19 @@ User     ──< AuditLog      (감사 로그, access_reason 필수)
 | `login-form.test.tsx` | 7 | 인증 플로우 + 실패 처리 |
 | `auth.test.ts` | 7 | `authorize` 로직 (비밀번호 불일치·미존재 사용자) |
 
-테스트 파일 위치: `src/actions/__tests__/`, `src/components/**/__tests__/`, `src/lib/__tests__/`
+### 커버리지 현황
+
+| 구분 | Statements | Branch | Functions | Lines |
+|------|:----------:|:------:|:---------:|:-----:|
+| **전체** | **83.23%** | **76.44%** | **85.71%** | **83.40%** |
+| `customer.actions.ts` | 96.61% | **100%** | 100% | 96.42% |
+| `history.actions.ts` | 92.59% | 83.33% | 100% | 92.15% |
+| `audit.actions.ts` | 100% | 100% | 100% | 100% |
+| `auth.actions.ts` | 100% | 100% | 100% | 100% |
+
+> Branch 커버리지 임계값: **70%** (Jest 설정). 현재 76.44%로 통과.
+
+테스트 파일 위치: `src/domains/**/__tests__/`, `src/shared/**/__tests__/`
 
 ---
 
@@ -274,7 +286,7 @@ GitHub에서 Pull Request 생성
 GitHub Actions CI 자동 실행
   ├── Lint (ESLint)
   ├── Type Check (tsc --noEmit)
-  └── Test (Jest — 107개 케이스)
+  └── Test (Jest — 128개 케이스)
          ↓
 ✅ 모든 CI 통과 → main에 Squash Merge
          ↓

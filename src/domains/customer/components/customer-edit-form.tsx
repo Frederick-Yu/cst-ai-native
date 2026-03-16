@@ -1,9 +1,9 @@
 "use client";
 
-import { useActionState } from "react";
+import { useState, useActionState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
-import { updateCustomer } from "@/domains/customer/actions/customer.actions";
+import { Loader2, Trash2 } from "lucide-react";
+import { updateCustomer, deleteCustomer } from "@/domains/customer/actions/customer.actions";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
@@ -38,7 +38,9 @@ interface CustomerEditFormProps {
 
 export function CustomerEditForm({ customer }: CustomerEditFormProps) {
   const router = useRouter();
-  const [state, formAction, isPending] = useActionState<FormState, FormData>(
+  const [mode, setMode] = useState<"edit" | "delete">("edit");
+
+  const [editState, editFormAction, isEditPending] = useActionState<FormState, FormData>(
     async (_prev, formData) => {
       const result = await updateCustomer(formData);
       return (result ?? null) as FormState;
@@ -46,8 +48,75 @@ export function CustomerEditForm({ customer }: CustomerEditFormProps) {
     null
   );
 
+  const [deleteState, deleteFormAction, isDeletePending] = useActionState<FormState, FormData>(
+    async (_prev, formData) => {
+      const result = await deleteCustomer(formData);
+      return (result ?? null) as FormState;
+    },
+    null
+  );
+
+  if (mode === "delete") {
+    return (
+      <form action={deleteFormAction} className="flex flex-col gap-5">
+        <input type="hidden" name="customerId" value={customer.id} />
+        <input type="hidden" name="customerName" value={customer.name} />
+
+        <div className="rounded-md border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+          <p className="font-medium">고객사를 삭제하시겠습니까?</p>
+          <p className="mt-1 text-rose-600">
+            <span className="font-semibold">{customer.name}</span>의 모든 데이터(담당자, 시스템 정보, 이력)가
+            영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="delete_reason" className="text-stone-700">
+            삭제 사유 <span className="text-rose-500">*</span>
+          </Label>
+          <Input
+            id="delete_reason"
+            name="change_reason"
+            placeholder="삭제 사유를 5자 이상 입력하세요"
+            required
+          />
+          {getFieldError(deleteState, "change_reason") && (
+            <p className="text-xs text-rose-500">{getFieldError(deleteState, "change_reason")}</p>
+          )}
+        </div>
+
+        {getStringError(deleteState) && (
+          <p role="alert" className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-600">
+            {getStringError(deleteState)}
+          </p>
+        )}
+
+        <div className="flex gap-3 pt-2">
+          <Button
+            type="button"
+            variant="outline"
+            className="flex-1"
+            onClick={() => setMode("edit")}
+            disabled={isDeletePending}
+          >
+            취소
+          </Button>
+          <Button
+            type="submit"
+            disabled={isDeletePending}
+            className="flex-1 bg-rose-600 text-white hover:bg-rose-500"
+          >
+            {isDeletePending ? (
+              <><Loader2 className="mr-2 size-4 animate-spin" aria-hidden="true" />삭제 중...</>
+            ) : "삭제 확인"}
+          </Button>
+        </div>
+      </form>
+    );
+  }
+
   return (
-    <form action={formAction} className="flex flex-col gap-5">
+    <form action={editFormAction} className="flex flex-col gap-5">
       <input type="hidden" name="customerId" value={customer.id} />
 
       {/* 고객사명 */}
@@ -56,7 +125,7 @@ export function CustomerEditForm({ customer }: CustomerEditFormProps) {
           고객사명 <span className="text-rose-500">*</span>
         </Label>
         <Input id="name" name="name" defaultValue={customer.name} required />
-        {getFieldError(state, "name") && <p className="text-xs text-rose-500">{getFieldError(state, "name")}</p>}
+        {getFieldError(editState, "name") && <p className="text-xs text-rose-500">{getFieldError(editState, "name")}</p>}
       </div>
 
       {/* 업종 */}
@@ -114,33 +183,43 @@ export function CustomerEditForm({ customer }: CustomerEditFormProps) {
           placeholder="변경 사유를 5자 이상 입력하세요"
           required
         />
-        {getFieldError(state, "change_reason") && (
-          <p className="text-xs text-rose-500">{getFieldError(state, "change_reason")}</p>
+        {getFieldError(editState, "change_reason") && (
+          <p className="text-xs text-rose-500">{getFieldError(editState, "change_reason")}</p>
         )}
       </div>
 
-      {getStringError(state) && (
+      {getStringError(editState) && (
         <p role="alert" className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-600">
-          {getStringError(state)}
+          {getStringError(editState)}
         </p>
       )}
 
       <div className="flex gap-3 pt-2">
         <Button
           type="button"
+          variant="ghost"
+          size="sm"
+          className="mr-auto text-rose-500 hover:bg-rose-50 hover:text-rose-600"
+          onClick={() => setMode("delete")}
+          disabled={isEditPending}
+        >
+          <Trash2 className="mr-1.5 size-3.5" aria-hidden="true" />
+          삭제
+        </Button>
+        <Button
+          type="button"
           variant="outline"
-          className="flex-1"
           onClick={() => router.back()}
-          disabled={isPending}
+          disabled={isEditPending}
         >
           취소
         </Button>
         <Button
           type="submit"
-          disabled={isPending}
-          className="flex-1 bg-teal-600 text-white hover:bg-teal-500"
+          disabled={isEditPending}
+          className="bg-teal-600 text-white hover:bg-teal-500"
         >
-          {isPending ? (
+          {isEditPending ? (
             <><Loader2 className="mr-2 size-4 animate-spin" aria-hidden="true" />저장 중...</>
           ) : "저장"}
         </Button>

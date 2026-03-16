@@ -9,7 +9,7 @@ import { Prisma } from "@prisma/client";
 import { getErrorMessage } from "@/shared/lib/utils";
 import { messages as m } from "@/shared/messages";
 import { type FieldErrors } from "@/shared/lib/form";
-import { UpdateCustomerSchema, CreateCustomerSchema } from "../schemas/customer";
+import { UpdateCustomerSchema, CreateCustomerSchema, DeleteCustomerSchema } from "../schemas/customer";
 
 export async function updateCustomer(formData: FormData) {
   const session = await getServerSession(authOptions);
@@ -52,6 +52,42 @@ export async function updateCustomer(formData: FormData) {
   revalidatePath(`/customers/${parsed.data.customerId}`);
   revalidatePath("/customers");
   redirect(`/customers/${parsed.data.customerId}`);
+}
+
+export async function deleteCustomer(formData: FormData) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user) return { success: false, error: m.common.authRequired };
+
+  const parsed = DeleteCustomerSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) {
+    return { success: false, error: parsed.error.flatten().fieldErrors as FieldErrors };
+  }
+
+  try {
+    await prisma.$transaction([
+      prisma.customer.delete({
+        where: { id: parsed.data.customerId },
+      }),
+      prisma.auditLog.create({
+        data: {
+          userId: session.user.id,
+          customerId: null,
+          actionType: "DELETE",
+          targetData: `Customer:${parsed.data.customerId}(${parsed.data.customerName})`,
+          accessReason: parsed.data.change_reason,
+        },
+      }),
+    ]);
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
+      return { success: false, error: m.customer.deleteNotFound };
+    }
+    console.error("[deleteCustomer]", getErrorMessage(error));
+    return { success: false, error: m.customer.deleteFailed };
+  }
+
+  revalidatePath("/customers");
+  redirect("/customers");
 }
 
 export async function createCustomer(formData: FormData) {

@@ -17,3 +17,9 @@ export const UpdateCustomerSchema = z.object({
   description: z.string().optional(),
   change_reason: z.string().min(5, m.common.changeReasonMin),
 });
+
+export const DeleteCustomerSchema = z.object({
+  customerId: z.string().min(1),
+  customerName: z.string().min(1),
+  change_reason: z.string().min(5, m.common.changeReasonMin),
+});

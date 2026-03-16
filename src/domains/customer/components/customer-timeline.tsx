@@ -2,6 +2,7 @@ import { EventType } from "@prisma/client";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import { Badge } from "@/shared/components/ui/badge";
+import { EditHistoryDialog } from "./edit-history-dialog";
 
 const EVENT_TYPE_LABELS: Record<EventType, string> = {
   INSTALLATION: "구축",
@@ -39,7 +40,12 @@ interface TimelineEntry {
   user: { name: string };
 }
 
-export function CustomerTimeline({ histories }: { histories: TimelineEntry[] }) {
+interface CustomerTimelineProps {
+  histories: TimelineEntry[];
+  customerId: string;
+}
+
+export function CustomerTimeline({ histories, customerId }: CustomerTimelineProps) {
   if (histories.length === 0) {
     return (
       <div className="py-8 text-center text-sm text-stone-400">
@@ -56,11 +62,22 @@ export function CustomerTimeline({ histories }: { histories: TimelineEntry[] }) 
             className={`absolute -left-[9px] mt-1.5 size-4 rounded-full border-2 border-white ${EVENT_TYPE_DOT[entry.eventType]}`}
             aria-hidden="true"
           />
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge className={`text-xs ${EVENT_TYPE_COLORS[entry.eventType]}`}>
-              {EVENT_TYPE_LABELS[entry.eventType]}
-            </Badge>
-            <h3 className="text-sm font-semibold text-stone-800">{entry.title}</h3>
+          <div className="flex flex-wrap items-start justify-between gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge className={`text-xs ${EVENT_TYPE_COLORS[entry.eventType]}`}>
+                {EVENT_TYPE_LABELS[entry.eventType]}
+              </Badge>
+              <h3 className="text-sm font-semibold text-stone-800">{entry.title}</h3>
+            </div>
+            <EditHistoryDialog
+              history={{
+                id: entry.id,
+                customerId,
+                eventType: entry.eventType,
+                title: entry.title,
+                content: entry.content,
+              }}
+            />
           </div>
           <p className="mt-1 line-clamp-2 text-sm text-stone-600">{entry.content}</p>
           <div className="mt-1 flex items-center gap-2 text-xs text-stone-400">

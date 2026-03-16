@@ -16,12 +16,17 @@ export const messages = {
   customer: {
     nameRequired: "고객사명은 필수입니다",
     notFound: "수정하려는 고객사를 찾을 수 없습니다",
+    deleteNotFound: "삭제하려는 고객사를 찾을 수 없습니다",
+    deleteFailed: "삭제 중 오류가 발생했습니다",
     duplicateName: "이미 등록된 고객사명입니다",
   },
   history: {
     titleRequired: "제목은 필수입니다",
     contentRequired: "내용은 필수입니다",
     customerNotFound: "존재하지 않는 고객사입니다",
+    notFound: "수정하려는 이력을 찾을 수 없습니다",
+    deleteNotFound: "삭제하려는 이력을 찾을 수 없습니다",
+    deleteFailed: "삭제 중 오류가 발생했습니다",
   },
   systemInfo: {
     idRequired: "시스템 정보 ID가 필요합니다",

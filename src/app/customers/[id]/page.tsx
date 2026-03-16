@@ -132,7 +132,7 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
                 <AddHistoryDialog customerId={id} />
               </CardHeader>
               <CardContent>
-                <CustomerTimeline histories={customer.histories} />
+                <CustomerTimeline histories={customer.histories} customerId={id} />
               </CardContent>
             </Card>
           </section>
